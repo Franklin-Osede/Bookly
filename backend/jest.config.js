@@ -1,21 +1,24 @@
 module.exports = {
-  moduleFileExtensions: ['js', 'json', 'ts'],
-  rootDir: 'src',
-  testRegex: '.*\\.spec\\.ts$',
+  preset: 'ts-jest',
+  testEnvironment: 'node',
+  rootDir: '.',
+  testRegex: 'test/.*\\.spec\\.ts$',
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   transform: {
-    '^.+\\.(t|j)s$': 'ts-jest',
+    '^.+\\.tsx?$': ['ts-jest', {
+      tsconfig: 'tsconfig.test.json',
+    }],
   },
   collectCoverageFrom: [
-    '**/*.(t|j)s',
+    'src/**/*.(t|j)s',
   ],
-  coverageDirectory: '../coverage',
-  testEnvironment: 'node',
-  moduleNameMapping: {
-    '^@/(.*)$': '<rootDir>/$1',
-    '^@/shared/(.*)$': '<rootDir>/shared/$1',
-    '^@/hotel/(.*)$': '<rootDir>/hotel/$1',
-    '^@/restaurant/(.*)$': '<rootDir>/restaurant/$1',
-    '^@/ai/(.*)$': '<rootDir>/ai/$1',
-    '^@/admin/(.*)$': '<rootDir>/admin/$1',
+  coverageDirectory: 'coverage',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^@/shared/(.*)$': '<rootDir>/src/shared/$1',
+    '^@/hotel/(.*)$': '<rootDir>/src/hotel/$1',
+    '^@/restaurant/(.*)$': '<rootDir>/src/restaurant/$1',
+    '^@/ai/(.*)$': '<rootDir>/src/ai/$1',
+    '^@/admin/(.*)$': '<rootDir>/src/admin/$1',
   },
 };

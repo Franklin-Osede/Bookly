@@ -1,4 +1,4 @@
-import { User } from './user.entity';
+import { User } from '../../../../src/shared/domain/entities/user.entity';
 
 describe('User Entity', () => {
   describe('create', () => {

@@ -1,4 +1,4 @@
-import { Business } from './business.entity';
+import { Business } from '../../../../src/shared/domain/entities/business.entity';
 
 describe('Business Entity', () => {
   describe('create', () => {
