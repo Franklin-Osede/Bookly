@@ -1,27 +1,30 @@
+import { Money } from '../value-objects/money';
+
 export type ReservationType = 'HOTEL' | 'RESTAURANT';
 export type ReservationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 
 export interface CreateReservationData {
+  userId: string;
   businessId: string;
-  customerId: string;
   type: ReservationType;
   startDate: Date;
   endDate: Date;
   guests: number;
-  totalAmount: number;
+  totalAmount: Money;
+  status?: ReservationStatus;
   notes?: string;
 }
 
 export class Reservation {
   public readonly id: string;
+  public userId: string;
   public businessId: string;
-  public customerId: string;
   public type: ReservationType;
   public status: ReservationStatus;
   public startDate: Date;
   public endDate: Date;
   public guests: number;
-  public totalAmount: number;
+  public totalAmount: Money;
   public notes?: string;
   public readonly createdAt: Date;
   public updatedAt: Date;
@@ -33,8 +36,8 @@ export class Reservation {
     updatedAt: Date 
   }) {
     this.id = data.id;
+    this.userId = data.userId;
     this.businessId = data.businessId;
-    this.customerId = data.customerId;
     this.type = data.type;
     this.status = data.status;
     this.startDate = data.startDate;
@@ -56,10 +59,6 @@ export class Reservation {
       throw new Error('Number of guests must be greater than 0');
     }
 
-    if (data.totalAmount <= 0) {
-      throw new Error('Total amount must be greater than 0');
-    }
-
     if (!Reservation.isValidType(data.type)) {
       throw new Error('Invalid reservation type');
     }
@@ -67,10 +66,10 @@ export class Reservation {
     const now = new Date();
     return new Reservation({
       id: Reservation.generateId(),
+      userId: data.userId,
       businessId: data.businessId,
-      customerId: data.customerId,
       type: data.type,
-      status: 'PENDING',
+      status: data.status || 'PENDING',
       startDate: data.startDate,
       endDate: data.endDate,
       guests: data.guests,
@@ -127,10 +126,7 @@ export class Reservation {
     this.updatedAt = new Date();
   }
 
-  updateTotalAmount(amount: number): void {
-    if (amount <= 0) {
-      throw new Error('Total amount must be greater than 0');
-    }
+  updateTotalAmount(amount: Money): void {
     this.totalAmount = amount;
     this.updatedAt = new Date();
   }

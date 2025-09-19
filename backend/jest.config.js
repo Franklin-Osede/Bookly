@@ -9,6 +9,9 @@ module.exports = {
       tsconfig: 'tsconfig.test.json',
     }],
   },
+  transformIgnorePatterns: [
+    'node_modules/(?!(uuid)/)',
+  ],
   collectCoverageFrom: [
     'src/**/*.(t|j)s',
   ],

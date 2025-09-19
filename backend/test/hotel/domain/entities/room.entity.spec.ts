@@ -1,4 +1,5 @@
 import { Room } from '../../../../src/hotel/domain/entities/room.entity';
+import { Money } from '../../../../src/shared/domain/value-objects/money';
 
 describe('Room Entity', () => {
   describe('create', () => {
@@ -7,9 +8,9 @@ describe('Room Entity', () => {
       const roomData = {
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
         description: 'Standard room with city view',
       };
 
@@ -20,9 +21,9 @@ describe('Room Entity', () => {
       expect(room).toBeDefined();
       expect(room.businessId).toBe('hotel-123');
       expect(room.number).toBe('101');
-      expect(room.type).toBe('STANDARD');
+      expect(room.type).toBe('SINGLE');
       expect(room.capacity).toBe(2);
-      expect(room.price).toBe(150.00);
+      expect(room.price.amount).toBe(150.00);
       expect(room.description).toBe('Standard room with city view');
       expect(room.isActive).toBe(true);
       expect(room.id).toBeDefined();
@@ -37,7 +38,7 @@ describe('Room Entity', () => {
         number: '201',
         type: 'SUITE' as const,
         capacity: 4,
-        price: 300.00,
+        price: new Money(300.00, 'USD'),
         description: 'Luxury suite with ocean view',
       };
 
@@ -47,7 +48,7 @@ describe('Room Entity', () => {
       // Assert
       expect(room.type).toBe('SUITE');
       expect(room.capacity).toBe(4);
-      expect(room.price).toBe(300.00);
+      expect(room.price.amount).toBe(300.00);
     });
 
     it('should create a room without description', () => {
@@ -57,7 +58,7 @@ describe('Room Entity', () => {
         number: '301',
         type: 'DELUXE' as const,
         capacity: 3,
-        price: 200.00,
+        price: new Money(200.00, 'USD'),
       };
 
       // Act
@@ -75,9 +76,9 @@ describe('Room Entity', () => {
       const roomData = {
         businessId: 'hotel-123',
         number: '',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       };
 
       // Act & Assert
@@ -89,9 +90,9 @@ describe('Room Entity', () => {
       const roomData = {
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 0,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       };
 
       // Act & Assert
@@ -99,17 +100,9 @@ describe('Room Entity', () => {
     });
 
     it('should throw error for negative price', () => {
-      // Arrange
-      const roomData = {
-        businessId: 'hotel-123',
-        number: '101',
-        type: 'STANDARD' as const,
-        capacity: 2,
-        price: -50.00,
-      };
-
       // Act & Assert
-      expect(() => Room.create(roomData)).toThrow('Room price must be greater than 0');
+      // The error is thrown in the Money constructor, not in Room.create
+      expect(() => new Money(-50.00, 'USD')).toThrow('Amount cannot be negative');
     });
 
     it('should throw error for invalid room type', () => {
@@ -119,7 +112,7 @@ describe('Room Entity', () => {
         number: '101',
         type: 'INVALID_TYPE' as any,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       };
 
       // Act & Assert
@@ -133,9 +126,9 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       });
 
       // Act
@@ -151,9 +144,9 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       });
       room.deactivate();
 
@@ -170,9 +163,9 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
         description: 'Old description',
       });
 
@@ -180,14 +173,14 @@ describe('Room Entity', () => {
       room.updateInfo({
         type: 'DELUXE' as const,
         capacity: 3,
-        price: 200.00,
+        price: new Money(200.00, 'USD'),
         description: 'New description',
       });
 
       // Assert
       expect(room.type).toBe('DELUXE');
       expect(room.capacity).toBe(3);
-      expect(room.price).toBe(200.00);
+      expect(room.price.amount).toBe(200.00);
       expect(room.description).toBe('New description');
       expect(room.updatedAt).toBeDefined();
     });
@@ -197,9 +190,9 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       });
 
       // Act & Assert
@@ -211,13 +204,13 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       });
 
       // Act & Assert
-      expect(() => room.updateInfo({ price: -100 })).toThrow('Room price must be greater than 0');
+      expect(() => room.updateInfo({ price: new Money(-100, 'USD') })).toThrow('Amount cannot be negative');
     });
   });
 
@@ -227,9 +220,9 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       });
 
       // Act & Assert
@@ -243,9 +236,9 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       });
       room.deactivate();
 
@@ -258,16 +251,16 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       });
 
       // Act
       const pricePerGuest = room.getPricePerGuest();
 
       // Assert
-      expect(pricePerGuest).toBe(75.00);
+      expect(pricePerGuest.amount).toBe(75.00);
     });
 
     it('should return room type display name', () => {
@@ -275,9 +268,9 @@ describe('Room Entity', () => {
       const standardRoom = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'STANDARD' as const,
+        type: 'SINGLE' as const,
         capacity: 2,
-        price: 150.00,
+        price: new Money(150.00, 'USD'),
       });
 
       const suiteRoom = Room.create({
@@ -285,11 +278,11 @@ describe('Room Entity', () => {
         number: '201',
         type: 'SUITE' as const,
         capacity: 4,
-        price: 300.00,
+        price: new Money(300.00, 'USD'),
       });
 
       // Act & Assert
-      expect(standardRoom.getTypeDisplayName()).toBe('Standard Room');
+      expect(standardRoom.getTypeDisplayName()).toBe('Single Room');
       expect(suiteRoom.getTypeDisplayName()).toBe('Suite');
     });
   });

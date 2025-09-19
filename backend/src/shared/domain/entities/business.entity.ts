@@ -1,21 +1,25 @@
+import { Address } from '../value-objects/address';
+import { Email } from '../value-objects/email';
+import { PhoneNumber } from '../value-objects/phone-number';
+
 export type BusinessType = 'HOTEL' | 'RESTAURANT';
 
 export interface CreateBusinessData {
   name: string;
   type: BusinessType;
   description?: string;
-  address: string;
-  phone: string;
-  email: string;
+  address: Address;
+  phone: PhoneNumber;
+  email: Email;
   ownerId: string;
 }
 
 export interface UpdateBusinessData {
   name?: string;
   description?: string;
-  address?: string;
-  phone?: string;
-  email?: string;
+  address?: Address;
+  phone?: PhoneNumber;
+  email?: Email;
 }
 
 export class Business {
@@ -23,9 +27,9 @@ export class Business {
   public name: string;
   public type: BusinessType;
   public description?: string;
-  public address: string;
-  public phone: string;
-  public email: string;
+  public address: Address;
+  public phone: PhoneNumber;
+  public email: Email;
   public ownerId: string;
   public readonly createdAt: Date;
   public updatedAt: Date;
@@ -47,14 +51,6 @@ export class Business {
     // Validaciones
     if (!data.name || data.name.trim() === '') {
       throw new Error('Business name is required');
-    }
-
-    if (!Business.isValidEmail(data.email)) {
-      throw new Error('Invalid email format');
-    }
-
-    if (!Business.isValidPhone(data.phone)) {
-      throw new Error('Invalid phone format');
     }
 
     if (!Business.isValidType(data.type)) {
@@ -93,30 +89,14 @@ export class Business {
     }
 
     if (data.phone !== undefined) {
-      if (!Business.isValidPhone(data.phone)) {
-        throw new Error('Invalid phone format');
-      }
       this.phone = data.phone;
     }
 
     if (data.email !== undefined) {
-      if (!Business.isValidEmail(data.email)) {
-        throw new Error('Invalid email format');
-      }
       this.email = data.email;
     }
 
     this.updatedAt = new Date();
-  }
-
-  private static isValidEmail(email: string): boolean {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  }
-
-  private static isValidPhone(phone: string): boolean {
-    const phoneRegex = /^\+?[\d\s\-\(\)]{10,}$/;
-    return phoneRegex.test(phone);
   }
 
   private static isValidType(type: string): type is BusinessType {

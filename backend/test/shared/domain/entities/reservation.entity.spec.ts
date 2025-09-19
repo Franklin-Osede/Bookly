@@ -1,4 +1,5 @@
 import { Reservation } from '../../../../src/shared/domain/entities/reservation.entity';
+import { Money } from '../../../../src/shared/domain/value-objects/money';
 
 describe('Reservation Entity', () => {
   describe('create', () => {
@@ -6,12 +7,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservationData = {
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
         notes: 'Anniversary trip',
       };
 
@@ -21,11 +22,11 @@ describe('Reservation Entity', () => {
       // Assert
       expect(reservation).toBeDefined();
       expect(reservation.businessId).toBe('business-123');
-      expect(reservation.customerId).toBe('customer-456');
+      expect(reservation.userId).toBe('customer-456');
       expect(reservation.type).toBe('HOTEL');
       expect(reservation.status).toBe('PENDING');
       expect(reservation.guests).toBe(2);
-      expect(reservation.totalAmount).toBe(200.00);
+      expect(reservation.totalAmount.amount).toBe(200.00);
       expect(reservation.notes).toBe('Anniversary trip');
       expect(reservation.id).toBeDefined();
       expect(reservation.createdAt).toBeDefined();
@@ -36,12 +37,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservationData = {
         businessId: 'restaurant-789',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'RESTAURANT' as const,
         startDate: new Date('2024-01-15T19:00:00'),
         endDate: new Date('2024-01-15T21:00:00'),
         guests: 4,
-        totalAmount: 150.00,
+        totalAmount: new Money(150.00, 'USD'),
       };
 
       // Act
@@ -50,7 +51,7 @@ describe('Reservation Entity', () => {
       // Assert
       expect(reservation.type).toBe('RESTAURANT');
       expect(reservation.guests).toBe(4);
-      expect(reservation.totalAmount).toBe(150.00);
+      expect(reservation.totalAmount.amount).toBe(150.00);
     });
   });
 
@@ -59,12 +60,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservationData = {
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-17'),
         endDate: new Date('2024-01-15'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       };
 
       // Act & Assert
@@ -75,12 +76,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservationData = {
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 0,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       };
 
       // Act & Assert
@@ -88,31 +89,21 @@ describe('Reservation Entity', () => {
     });
 
     it('should throw error for negative total amount', () => {
-      // Arrange
-      const reservationData = {
-        businessId: 'business-123',
-        customerId: 'customer-456',
-        type: 'HOTEL' as const,
-        startDate: new Date('2024-01-15'),
-        endDate: new Date('2024-01-17'),
-        guests: 2,
-        totalAmount: -100.00,
-      };
-
       // Act & Assert
-      expect(() => Reservation.create(reservationData)).toThrow('Total amount must be greater than 0');
+      // The error is thrown in the Money constructor, not in Reservation.create
+      expect(() => new Money(-100.00, 'USD')).toThrow('Amount cannot be negative');
     });
 
     it('should throw error for invalid reservation type', () => {
       // Arrange
       const reservationData = {
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'INVALID_TYPE' as any,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       };
 
       // Act & Assert
@@ -125,12 +116,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservation = Reservation.create({
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       });
 
       // Act
@@ -145,12 +136,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservation = Reservation.create({
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       });
 
       // Act
@@ -165,12 +156,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservation = Reservation.create({
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       });
       reservation.confirm();
 
@@ -186,12 +177,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservation = Reservation.create({
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       });
 
       // Act & Assert
@@ -204,12 +195,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservation = Reservation.create({
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       });
 
       // Act
@@ -223,12 +214,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservation = Reservation.create({
         businessId: 'restaurant-789',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'RESTAURANT' as const,
         startDate: new Date('2024-01-15T19:00:00'),
         endDate: new Date('2024-01-15T21:00:00'),
         guests: 4,
-        totalAmount: 150.00,
+        totalAmount: new Money(150.00, 'USD'),
       });
 
       // Act
@@ -242,12 +233,12 @@ describe('Reservation Entity', () => {
       // Arrange
       const reservation = Reservation.create({
         businessId: 'business-123',
-        customerId: 'customer-456',
+        userId: 'customer-456',
         type: 'HOTEL' as const,
         startDate: new Date('2024-01-15'),
         endDate: new Date('2024-01-17'),
         guests: 2,
-        totalAmount: 200.00,
+        totalAmount: new Money(200.00, 'USD'),
       });
 
       // Act & Assert

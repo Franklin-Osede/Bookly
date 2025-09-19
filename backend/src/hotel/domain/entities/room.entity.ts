@@ -1,19 +1,23 @@
-export type RoomType = 'STANDARD' | 'DELUXE' | 'SUITE' | 'PRESIDENTIAL';
+import { Money } from '../../../shared/domain/value-objects/money';
+
+export type RoomType = 'SINGLE' | 'DOUBLE' | 'SUITE' | 'DELUXE';
 
 export interface CreateRoomData {
   businessId: string;
   number: string;
   type: RoomType;
   capacity: number;
-  price: number;
+  price: Money;
   description?: string;
+  isActive?: boolean;
 }
 
 export interface UpdateRoomData {
   type?: RoomType;
   capacity?: number;
-  price?: number;
+  price?: Money;
   description?: string;
+  isActive?: boolean;
 }
 
 export class Room {
@@ -22,7 +26,7 @@ export class Room {
   public number: string;
   public type: RoomType;
   public capacity: number;
-  public price: number;
+  public price: Money;
   public description?: string;
   public isActive: boolean;
   public readonly createdAt: Date;
@@ -56,10 +60,6 @@ export class Room {
       throw new Error('Room capacity must be greater than 0');
     }
 
-    if (data.price <= 0) {
-      throw new Error('Room price must be greater than 0');
-    }
-
     if (!Room.isValidType(data.type)) {
       throw new Error('Invalid room type');
     }
@@ -73,7 +73,7 @@ export class Room {
       capacity: data.capacity,
       price: data.price,
       description: data.description,
-      isActive: true,
+      isActive: data.isActive ?? true,
       createdAt: now,
       updatedAt: now,
     });
@@ -106,14 +106,15 @@ export class Room {
     }
 
     if (data.price !== undefined) {
-      if (data.price <= 0) {
-        throw new Error('Room price must be greater than 0');
-      }
       this.price = data.price;
     }
 
     if (data.description !== undefined) {
       this.description = data.description;
+    }
+
+    if (data.isActive !== undefined) {
+      this.isActive = data.isActive;
     }
 
     this.updatedAt = new Date();
@@ -124,16 +125,16 @@ export class Room {
     return this.isActive && guests > 0 && guests <= this.capacity;
   }
 
-  getPricePerGuest(): number {
-    return this.price / this.capacity;
+  getPricePerGuest(): Money {
+    return new Money(this.price.amount / this.capacity, this.price.currency);
   }
 
   getTypeDisplayName(): string {
     const typeNames: Record<RoomType, string> = {
-      'STANDARD': 'Standard Room',
-      'DELUXE': 'Deluxe Room',
+      'SINGLE': 'Single Room',
+      'DOUBLE': 'Double Room',
       'SUITE': 'Suite',
-      'PRESIDENTIAL': 'Presidential Suite',
+      'DELUXE': 'Deluxe Room',
     };
     return typeNames[this.type];
   }
@@ -148,7 +149,7 @@ export class Room {
   }
 
   private static isValidType(type: string): type is RoomType {
-    return ['STANDARD', 'DELUXE', 'SUITE', 'PRESIDENTIAL'].includes(type);
+    return ['SINGLE', 'DOUBLE', 'SUITE', 'DELUXE'].includes(type);
   }
 
   private static generateId(): string {

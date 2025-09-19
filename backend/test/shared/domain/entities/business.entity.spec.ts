@@ -1,4 +1,7 @@
 import { Business } from '../../../../src/shared/domain/entities/business.entity';
+import { Address } from '../../../../src/shared/domain/value-objects/address';
+import { PhoneNumber } from '../../../../src/shared/domain/value-objects/phone-number';
+import { Email } from '../../../../src/shared/domain/value-objects/email';
 
 describe('Business Entity', () => {
   describe('create', () => {
@@ -8,9 +11,15 @@ describe('Business Entity', () => {
         name: 'Hotel Paradise',
         type: 'HOTEL' as const,
         description: 'Luxury hotel in the city center',
-        address: '123 Main St, City',
-        phone: '+1234567890',
-        email: 'info@hotelparadise.com',
+        address: new Address({
+          street: '123 Main St',
+          city: 'City',
+          state: 'State',
+          zipCode: '12345',
+          country: 'Country'
+        }),
+        phone: new PhoneNumber('+1234567890'),
+        email: new Email('info@hotelparadise.com'),
         ownerId: 'owner-123',
       };
 
@@ -33,9 +42,15 @@ describe('Business Entity', () => {
         name: 'Restaurant Deluxe',
         type: 'RESTAURANT' as const,
         description: 'Fine dining restaurant',
-        address: '456 Food Ave, City',
-        phone: '+1234567891',
-        email: 'info@restaurantdeluxe.com',
+        address: new Address({
+          street: '456 Food Ave',
+          city: 'City',
+          state: 'State',
+          zipCode: '12345',
+          country: 'Country'
+        }),
+        phone: new PhoneNumber('+1234567891'),
+        email: new Email('info@restaurantdeluxe.com'),
         ownerId: 'owner-456',
       };
 
@@ -55,9 +70,15 @@ describe('Business Entity', () => {
         name: '',
         type: 'HOTEL' as const,
         description: 'Test hotel',
-        address: '123 Main St',
-        phone: '+1234567890',
-        email: 'test@hotel.com',
+        address: new Address({
+          street: '123 Main St',
+          city: 'City',
+          state: 'State',
+          zipCode: '12345',
+          country: 'Country'
+        }),
+        phone: new PhoneNumber('+1234567890'),
+        email: new Email('test@hotel.com'),
         ownerId: 'owner-123',
       };
 
@@ -66,35 +87,15 @@ describe('Business Entity', () => {
     });
 
     it('should throw error for invalid email', () => {
-      // Arrange
-      const businessData = {
-        name: 'Test Hotel',
-        type: 'HOTEL' as const,
-        description: 'Test hotel',
-        address: '123 Main St',
-        phone: '+1234567890',
-        email: 'invalid-email',
-        ownerId: 'owner-123',
-      };
-
       // Act & Assert
-      expect(() => Business.create(businessData)).toThrow('Invalid email format');
+      // The error is thrown in the Email constructor, not in Business.create
+      expect(() => new Email('invalid-email')).toThrow('Invalid email format');
     });
 
     it('should throw error for invalid phone', () => {
-      // Arrange
-      const businessData = {
-        name: 'Test Hotel',
-        type: 'HOTEL' as const,
-        description: 'Test hotel',
-        address: '123 Main St',
-        phone: 'invalid-phone',
-        email: 'test@hotel.com',
-        ownerId: 'owner-123',
-      };
-
       // Act & Assert
-      expect(() => Business.create(businessData)).toThrow('Invalid phone format');
+      // The error is thrown in the PhoneNumber constructor, not in Business.create
+      expect(() => new PhoneNumber('invalid-phone')).toThrow('Phone number must include country code');
     });
   });
 
@@ -105,9 +106,15 @@ describe('Business Entity', () => {
         name: 'Old Hotel',
         type: 'HOTEL' as const,
         description: 'Old description',
-        address: 'Old Address',
-        phone: '+1234567890',
-        email: 'old@hotel.com',
+        address: new Address({
+          street: 'Old Address',
+          city: 'City',
+          state: 'State',
+          zipCode: '12345',
+          country: 'Country'
+        }),
+        phone: new PhoneNumber('+1234567890'),
+        email: new Email('old@hotel.com'),
         ownerId: 'owner-123',
       });
 
@@ -115,13 +122,19 @@ describe('Business Entity', () => {
       business.updateInfo({
         name: 'New Hotel',
         description: 'New description',
-        address: 'New Address',
+        address: new Address({
+          street: 'New Address',
+          city: 'City',
+          state: 'State',
+          zipCode: '12345',
+          country: 'Country'
+        }),
       });
 
       // Assert
       expect(business.name).toBe('New Hotel');
       expect(business.description).toBe('New description');
-      expect(business.address).toBe('New Address');
+      expect(business.address.street).toBe('New Address');
       expect(business.updatedAt).toBeDefined();
     });
   });

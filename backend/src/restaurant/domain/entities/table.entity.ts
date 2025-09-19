@@ -1,4 +1,4 @@
-export type TableLocation = 'MAIN_HALL' | 'TERRACE' | 'PRIVATE_ROOM' | 'BAR_AREA' | 'OUTDOOR';
+export type TableLocation = 'INDOOR' | 'OUTDOOR' | 'PATIO' | 'BAR';
 
 export interface CreateTableData {
   businessId: string;
@@ -6,12 +6,14 @@ export interface CreateTableData {
   capacity: number;
   location: TableLocation;
   description?: string;
+  isActive?: boolean;
 }
 
 export interface UpdateTableData {
   capacity?: number;
   location?: TableLocation;
   description?: string;
+  isActive?: boolean;
 }
 
 export class Table {
@@ -68,7 +70,7 @@ export class Table {
       capacity: data.capacity,
       location: data.location,
       description: data.description,
-      isActive: true,
+      isActive: data.isActive ?? true,
       createdAt: now,
       updatedAt: now,
     });
@@ -104,6 +106,10 @@ export class Table {
       this.description = data.description;
     }
 
+    if (data.isActive !== undefined) {
+      this.isActive = data.isActive;
+    }
+
     this.updatedAt = new Date();
   }
 
@@ -118,11 +124,10 @@ export class Table {
 
   getLocationDisplayName(): string {
     const locationNames: Record<TableLocation, string> = {
-      'MAIN_HALL': 'Main Hall',
-      'TERRACE': 'Terrace',
-      'PRIVATE_ROOM': 'Private Room',
-      'BAR_AREA': 'Bar Area',
+      'INDOOR': 'Indoor',
       'OUTDOOR': 'Outdoor',
+      'PATIO': 'Patio',
+      'BAR': 'Bar',
     };
     return locationNames[this.location];
   }
@@ -137,16 +142,16 @@ export class Table {
   }
 
   // Helper methods for restaurant operations
-  isInMainHall(): boolean {
-    return this.location === 'MAIN_HALL';
-  }
-
-  isInPrivateArea(): boolean {
-    return this.location === 'PRIVATE_ROOM';
+  isIndoor(): boolean {
+    return this.location === 'INDOOR';
   }
 
   isOutdoor(): boolean {
-    return this.location === 'TERRACE' || this.location === 'OUTDOOR';
+    return this.location === 'OUTDOOR' || this.location === 'PATIO';
+  }
+
+  isInBarArea(): boolean {
+    return this.location === 'BAR';
   }
 
   getCapacityCategory(): 'SMALL' | 'MEDIUM' | 'LARGE' {
@@ -156,7 +161,7 @@ export class Table {
   }
 
   private static isValidLocation(location: string): location is TableLocation {
-    return ['MAIN_HALL', 'TERRACE', 'PRIVATE_ROOM', 'BAR_AREA', 'OUTDOOR'].includes(location);
+    return ['INDOOR', 'OUTDOOR', 'PATIO', 'BAR'].includes(location);
   }
 
   private static generateId(): string {
