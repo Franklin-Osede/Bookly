@@ -1,6 +1,6 @@
+import { Email } from '../../../../src/shared/domain/value-objects/email';
 import { UserRepository } from '../../../../src/shared/application/repositories/user.repository';
 import { User } from '../../../../src/shared/domain/entities/user.entity';
-import { Email } from '../../../../src/shared/domain/value-objects/email';
 
 describe('UserRepository', () => {
   let userRepository: UserRepository;
@@ -51,7 +51,7 @@ describe('UserRepository', () => {
   describe('save', () => {
     it('should save a user successfully', async () => {
       const user = User.create({
-        email: 'test@example.com',
+        email: new Email('test@example.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER'
       });
@@ -65,7 +65,7 @@ describe('UserRepository', () => {
 
     it('should save a user with all required fields', async () => {
       const user = User.create({
-        email: 'admin@example.com',
+        email: new Email('admin@example.com'), name: 'Test User',
         password: 'admin123',
         role: 'ADMIN'
       });
@@ -84,7 +84,7 @@ describe('UserRepository', () => {
   describe('findById', () => {
     it('should return user when found by id', async () => {
       const user = User.create({
-        email: 'test@example.com',
+        email: new Email('test@example.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER'
       });
@@ -113,7 +113,7 @@ describe('UserRepository', () => {
     it('should return user when found by email', async () => {
       const email = new Email('test@example.com');
       const user = User.create({
-        email: 'test@example.com',
+        email: new Email('test@example.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER'
       });
@@ -137,7 +137,7 @@ describe('UserRepository', () => {
     it('should handle case insensitive email search', async () => {
       const email = new Email('TEST@EXAMPLE.COM');
       const user = User.create({
-        email: 'test@example.com',
+        email: new Email('test@example.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER'
       });
@@ -156,12 +156,12 @@ describe('UserRepository', () => {
     it('should return all users', async () => {
       const users = [
         User.create({
-          email: 'user1@example.com',
+          email: new Email('user1@example.com'), name: 'Test User',
           password: 'password123',
           role: 'CUSTOMER'
         }),
         User.create({
-          email: 'user2@example.com',
+          email: new Email('user2@example.com'), name: 'Test User',
           password: 'password123',
           role: 'BUSINESS_OWNER'
         })
@@ -187,7 +187,7 @@ describe('UserRepository', () => {
   describe('update', () => {
     it('should update user successfully', async () => {
       const user = User.create({
-        email: 'test@example.com',
+        email: new Email('test@example.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER'
       });
@@ -198,7 +198,7 @@ describe('UserRepository', () => {
 
       // Mock the repository to return updated user
       const mockUpdatedUser = User.create({
-        email: 'test@example.com',
+        email: new Email('test@example.com'), name: 'Test User',
         password: 'password123',
         role: 'BUSINESS_OWNER'
       });
@@ -274,13 +274,13 @@ describe('UserRepository', () => {
   describe('Business logic', () => {
     it('should handle concurrent user creation', async () => {
       const user1 = User.create({
-        email: 'test1@example.com',
+        email: new Email('test1@example.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER'
       });
 
       const user2 = User.create({
-        email: 'test2@example.com',
+        email: new Email('test2@example.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER'
       });
@@ -298,7 +298,7 @@ describe('UserRepository', () => {
     it('should handle email uniqueness constraint', async () => {
       const email = new Email('duplicate@example.com');
       const user1 = User.create({
-        email: 'duplicate@example.com',
+        email: new Email('duplicate@example.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER'
       });

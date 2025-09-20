@@ -3,7 +3,7 @@ import { BusinessRepository } from '../../../../src/shared/application/repositor
 import { RoomRepository } from '../../../../src/hotel/application/repositories/room.repository';
 import { ReservationRepository } from '../../../../src/shared/application/repositories/reservation.repository';
 import { Business } from '../../../../src/shared/domain/entities/business.entity';
-import { Room } from '../../../../src/hotel/domain/entities/room.entity';
+import { Room, RoomType } from '../../../../src/hotel/domain/entities/room.entity';
 import { Reservation } from '../../../../src/shared/domain/entities/reservation.entity';
 import { Money } from '../../../../src/shared/domain/value-objects/money';
 import { Email } from '../../../../src/shared/domain/value-objects/email';
@@ -52,7 +52,7 @@ describe('RoomService', () => {
   const createTestRoom = (overrides: Partial<{
     businessId: string;
     number: string;
-    type: 'SINGLE' | 'DOUBLE' | 'SUITE' | 'DELUXE';
+    type: RoomType;
     capacity: number;
     price: number;
     currency: string;
@@ -61,7 +61,7 @@ describe('RoomService', () => {
     const defaults = {
       businessId: 'business-123',
       number: '101',
-      type: 'DOUBLE' as const,
+      type: RoomType.DOUBLE as const,
       capacity: 2,
       price: 150,
       currency: 'USD',
@@ -140,7 +140,7 @@ describe('RoomService', () => {
       const roomData = {
         businessId: business.id,
         number: '101',
-        type: 'DOUBLE' as const,
+        type: RoomType.DOUBLE as const,
         capacity: 2,
         price: new Money(150, 'USD'),
         description: 'Comfortable double room'
@@ -157,7 +157,7 @@ describe('RoomService', () => {
       expect(result).toBeInstanceOf(Room);
       expect(result.businessId).toBe(business.id);
       expect(result.number).toBe('101');
-      expect(result.type).toBe('DOUBLE');
+      expect(result.type).toBe(RoomType.DOUBLE);
       expect(result.capacity).toBe(2);
       expect(result.price.amount).toBe(150);
       expect(result.isActive).toBe(true);
@@ -169,7 +169,7 @@ describe('RoomService', () => {
       const roomData = {
         businessId: 'non-existent-business',
         number: '101',
-        type: 'DOUBLE' as const,
+        type: RoomType.DOUBLE as const,
         capacity: 2,
         price: new Money(150, 'USD')
       };
@@ -187,7 +187,7 @@ describe('RoomService', () => {
       const roomData = {
         businessId: business.id,
         number: '101',
-        type: 'DOUBLE' as const,
+        type: RoomType.DOUBLE as const,
         capacity: 2,
         price: new Money(150, 'USD')
       };
@@ -206,7 +206,7 @@ describe('RoomService', () => {
       const roomData = {
         businessId: business.id,
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE,
         capacity: 1,
         price: new Money(100, 'USD')
       };
@@ -434,20 +434,20 @@ describe('RoomService', () => {
       // Arrange
       const business = createTestBusiness({ type: 'HOTEL' });
       const rooms = [
-        createTestRoom({ businessId: business.id, type: 'SUITE', number: '501' }),
-        createTestRoom({ businessId: business.id, type: 'SUITE', number: '502' })
+        createTestRoom({ businessId: business.id, type: RoomType.SUITE, number: '501' }),
+        createTestRoom({ businessId: business.id, type: RoomType.SUITE, number: '502' })
       ];
 
       businessRepository.findById.mockResolvedValue(business);
       roomRepository.findByType.mockResolvedValue(rooms);
 
       // Act
-      const result = await roomService.getRoomsByType(business.id, 'SUITE');
+      const result = await roomService.getRoomsByType(business.id, RoomType.SUITE);
 
       // Assert
       expect(result).toHaveLength(2);
-      expect(result[0].type).toBe('SUITE');
-      expect(result[1].type).toBe('SUITE');
+      expect(result[0].type).toBe(RoomType.SUITE);
+      expect(result[1].type).toBe(RoomType.SUITE);
     });
 
     it('should throw error when business not found', async () => {
@@ -455,7 +455,7 @@ describe('RoomService', () => {
       businessRepository.findById.mockResolvedValue(null);
 
       // Act & Assert
-      await expect(roomService.getRoomsByType('non-existent-business', 'SUITE'))
+      await expect(roomService.getRoomsByType('non-existent-business', RoomType.SUITE))
         .rejects.toThrow('Business not found');
     });
   });
@@ -622,7 +622,7 @@ describe('RoomService', () => {
       // Arrange
       const room = createTestRoom({
         businessId: 'business-123',
-        type: 'SUITE',
+        type: RoomType.SUITE,
         number: '501'
       });
 

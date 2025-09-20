@@ -2,21 +2,23 @@ import { BusinessRepository } from '../../../shared/application/repositories/bus
 import { RoomRepository } from '../repositories/room.repository';
 import { ReservationRepository } from '../../../shared/application/repositories/reservation.repository';
 import { Business } from '../../../shared/domain/entities/business.entity';
-import { Room } from '../../domain/entities/room.entity';
+import { Room, RoomType } from '../../domain/entities/room.entity';
 import { Reservation } from '../../../shared/domain/entities/reservation.entity';
 import { Money } from '../../../shared/domain/value-objects/money';
+import { REPOSITORY_TOKENS } from '../../../shared/application/tokens/repository.tokens';
+import { Inject } from '@nestjs/common';
 
 export interface CreateRoomData {
   businessId: string;
   number: string;
-  type: 'SINGLE' | 'DOUBLE' | 'SUITE' | 'DELUXE';
+  type: RoomType;
   capacity: number;
   price: Money;
   description?: string;
 }
 
 export interface UpdateRoomData {
-  type?: 'SINGLE' | 'DOUBLE' | 'SUITE' | 'DELUXE';
+  type?: RoomType;
   capacity?: number;
   price?: Money;
   description?: string;
@@ -25,8 +27,11 @@ export interface UpdateRoomData {
 
 export class RoomService {
   constructor(
+    @Inject(REPOSITORY_TOKENS.BUSINESS_REPOSITORY)
     private readonly businessRepository: BusinessRepository,
+    @Inject(REPOSITORY_TOKENS.ROOM_REPOSITORY)
     private readonly roomRepository: RoomRepository,
+    @Inject(REPOSITORY_TOKENS.RESERVATION_REPOSITORY)
     private readonly reservationRepository: ReservationRepository
   ) {}
 

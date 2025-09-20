@@ -1,4 +1,6 @@
 import { ReservationService } from '../../../../src/shared/application/services/reservation.service';
+import { Email } from '../../../../src/shared/domain/value-objects/email';
+import { TableLocation } from '../../../../src/restaurant/domain/entities/table.entity';
 import { UserRepository } from '../../../../src/shared/application/repositories/user.repository';
 import { BusinessRepository } from '../../../../src/shared/application/repositories/business.repository';
 import { ReservationRepository } from '../../../../src/shared/application/repositories/reservation.repository';
@@ -7,10 +9,9 @@ import { TableRepository } from '../../../../src/restaurant/application/reposito
 import { User } from '../../../../src/shared/domain/entities/user.entity';
 import { Business } from '../../../../src/shared/domain/entities/business.entity';
 import { Reservation } from '../../../../src/shared/domain/entities/reservation.entity';
-import { Room } from '../../../../src/hotel/domain/entities/room.entity';
+import { Room, RoomType } from '../../../../src/hotel/domain/entities/room.entity';
 import { Table } from '../../../../src/restaurant/domain/entities/table.entity';
 import { Money } from '../../../../src/shared/domain/value-objects/money';
-import { Email } from '../../../../src/shared/domain/value-objects/email';
 import { PhoneNumber } from '../../../../src/shared/domain/value-objects/phone-number';
 import { Address } from '../../../../src/shared/domain/value-objects/address';
 
@@ -35,7 +36,8 @@ describe('ReservationService', () => {
     };
     const data = { ...defaults, ...overrides };
     return User.create({
-      email: data.email,
+      name: 'Test User',
+      email: new Email(data.email),
       password: data.password,
       role: data.role
     });
@@ -76,14 +78,14 @@ describe('ReservationService', () => {
   const createTestRoom = (overrides: Partial<{
     businessId: string;
     number: string;
-    type: 'SINGLE' | 'DOUBLE' | 'SUITE' | 'DELUXE';
+    type: RoomType;
     capacity: number;
     price: number;
   }> = {}) => {
     const defaults = {
       businessId: 'business-123',
       number: '101',
-      type: 'DOUBLE' as const,
+      type: RoomType.DOUBLE as const,
       capacity: 2,
       price: 150
     };
@@ -103,13 +105,13 @@ describe('ReservationService', () => {
     businessId: string;
     number: string;
     capacity: number;
-    location: 'INDOOR' | 'OUTDOOR' | 'PATIO' | 'BAR';
+    location: TableLocation.INDOOR | TableLocation.OUTDOOR | TableLocation.PATIO | TableLocation.BAR;
   }> = {}) => {
     const defaults = {
       businessId: 'business-123',
       number: 'T1',
       capacity: 4,
-      location: 'INDOOR' as const
+      location: TableLocation.INDOOR as const
     };
     const data = { ...defaults, ...overrides };
     

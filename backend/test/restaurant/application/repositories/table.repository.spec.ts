@@ -1,3 +1,4 @@
+import { TableLocation } from '../../../../src/restaurant/domain/entities/table.entity';
 import { TableRepository } from '../../../../src/restaurant/application/repositories/table.repository';
 import { Table } from '../../../../src/restaurant/domain/entities/table.entity';
 
@@ -9,14 +10,14 @@ describe('TableRepository', () => {
     businessId: string;
     number: string;
     capacity: number;
-    location: 'INDOOR' | 'OUTDOOR' | 'PATIO' | 'BAR';
+    location: TableLocation.INDOOR | TableLocation.OUTDOOR | TableLocation.PATIO | TableLocation.BAR;
     isActive: boolean;
   }> = {}) => {
     const defaults = {
       businessId: 'business-123',
       number: 'T1',
       capacity: 4,
-      location: 'INDOOR' as const,
+      location: TableLocation.INDOOR as const,
       isActive: true
     };
 
@@ -58,11 +59,11 @@ describe('TableRepository', () => {
         }
         return null;
       },
-      async findByLocation(businessId: string, location: 'INDOOR' | 'OUTDOOR' | 'PATIO' | 'BAR'): Promise<Table[]> {
+      async findByLocation(businessId: string, location: TableLocation.INDOOR | TableLocation.OUTDOOR | TableLocation.PATIO | TableLocation.BAR): Promise<Table[]> {
         if (!businessId || businessId.trim() === '') {
           throw new Error('Business ID is required');
         }
-        if (!['INDOOR', 'OUTDOOR', 'PATIO', 'BAR'].includes(location)) {
+        if (![TableLocation.INDOOR, TableLocation.OUTDOOR, TableLocation.PATIO, TableLocation.BAR].includes(location)) {
           throw new Error('Invalid table location');
         }
         return [];
@@ -121,7 +122,7 @@ describe('TableRepository', () => {
   describe('save', () => {
     it('should save an indoor table successfully', async () => {
       const table = createTestTable({
-        location: 'INDOOR',
+        location: TableLocation.INDOOR,
         number: 'T1',
         capacity: 4
       });
@@ -129,14 +130,14 @@ describe('TableRepository', () => {
       const savedTable = await tableRepository.save(table);
 
       expect(savedTable).toBeInstanceOf(Table);
-      expect(savedTable.location).toBe('INDOOR');
+      expect(savedTable.location).toBe(TableLocation.INDOOR);
       expect(savedTable.number).toBe('T1');
       expect(savedTable.capacity).toBe(4);
     });
 
     it('should save an outdoor table successfully', async () => {
       const table = createTestTable({
-        location: 'OUTDOOR',
+        location: TableLocation.OUTDOOR,
         number: 'T10',
         capacity: 6
       });
@@ -144,7 +145,7 @@ describe('TableRepository', () => {
       const savedTable = await tableRepository.save(table);
 
       expect(savedTable).toBeInstanceOf(Table);
-      expect(savedTable.location).toBe('OUTDOOR');
+      expect(savedTable.location).toBe(TableLocation.OUTDOOR);
       expect(savedTable.number).toBe('T10');
       expect(savedTable.capacity).toBe(6);
     });
@@ -154,7 +155,7 @@ describe('TableRepository', () => {
         businessId: 'restaurant-456',
         number: 'T5',
         capacity: 2,
-        location: 'BAR',
+        location: TableLocation.BAR,
         isActive: false
       });
 
@@ -165,7 +166,7 @@ describe('TableRepository', () => {
       expect(savedTable.businessId).toBe('restaurant-456');
       expect(savedTable.number).toBe('T5');
       expect(savedTable.capacity).toBe(2);
-      expect(savedTable.location).toBe('BAR');
+      expect(savedTable.location).toBe(TableLocation.BAR);
       expect(savedTable.isActive).toBe(false);
       expect(savedTable.createdAt).toBeDefined();
       expect(savedTable.updatedAt).toBeDefined();
@@ -206,12 +207,12 @@ describe('TableRepository', () => {
         createTestTable({
           businessId: 'restaurant-123',
           number: 'T1',
-          location: 'INDOOR'
+          location: TableLocation.INDOOR
         }),
         createTestTable({
           businessId: 'restaurant-123',
           number: 'T2',
-          location: 'OUTDOOR'
+          location: TableLocation.OUTDOOR
         })
       ];
 
@@ -272,12 +273,12 @@ describe('TableRepository', () => {
       const tables = [
         createTestTable({
           businessId: 'restaurant-123',
-          location: 'OUTDOOR',
+          location: TableLocation.OUTDOOR,
           number: 'T10'
         }),
         createTestTable({
           businessId: 'restaurant-123',
-          location: 'OUTDOOR',
+          location: TableLocation.OUTDOOR,
           number: 'T11'
         })
       ];
@@ -285,21 +286,21 @@ describe('TableRepository', () => {
       // Mock the repository to return tables
       tableRepository.findByLocation = jest.fn().mockResolvedValue(tables);
 
-      const foundTables = await tableRepository.findByLocation('restaurant-123', 'OUTDOOR');
+      const foundTables = await tableRepository.findByLocation('restaurant-123', TableLocation.OUTDOOR);
 
       expect(foundTables).toHaveLength(2);
-      expect(foundTables[0].location).toBe('OUTDOOR');
-      expect(foundTables[1].location).toBe('OUTDOOR');
+      expect(foundTables[0].location).toBe(TableLocation.OUTDOOR);
+      expect(foundTables[1].location).toBe(TableLocation.OUTDOOR);
     });
 
     it('should return empty array when no tables found with location', async () => {
-      const foundTables = await tableRepository.findByLocation('restaurant-123', 'BAR');
+      const foundTables = await tableRepository.findByLocation('restaurant-123', TableLocation.BAR);
 
       expect(foundTables).toEqual([]);
     });
 
     it('should throw error for invalid parameters', async () => {
-      await expect(tableRepository.findByLocation('', 'OUTDOOR')).rejects.toThrow('Business ID is required');
+      await expect(tableRepository.findByLocation('', TableLocation.OUTDOOR)).rejects.toThrow('Business ID is required');
       await expect(tableRepository.findByLocation('restaurant-123', 'INVALID_LOCATION' as any)).rejects.toThrow('Invalid table location');
     });
   });
@@ -431,11 +432,11 @@ describe('TableRepository', () => {
     it('should return all tables', async () => {
       const tables = [
         createTestTable({
-          location: 'INDOOR',
+          location: TableLocation.INDOOR,
           number: 'T1'
         }),
         createTestTable({
-          location: 'OUTDOOR',
+          location: TableLocation.OUTDOOR,
           number: 'T10'
         })
       ];

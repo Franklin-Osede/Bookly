@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SharedModule } from './shared/shared.module';
+import { AuthModule } from './shared/auth.module';
 import { HotelModule } from './hotel/hotel.module';
 import { RestaurantModule } from './restaurant/restaurant.module';
 import { AiModule } from './ai/ai.module';
@@ -25,6 +26,7 @@ import { AdminModule } from './admin/admin.module';
       logging: process.env.NODE_ENV === 'development',
     }),
     SharedModule,
+    AuthModule,
     HotelModule,
     RestaurantModule,
     AiModule,

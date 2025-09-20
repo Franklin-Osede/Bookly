@@ -1,10 +1,70 @@
-# 🏨 Bookly - Sistema de Gestión Inteligente para Hoteles y Restaurantes
+# 🤖🏨🍽️ Bookly - Asistente Inteligente de Reservas Multicanal
 
 ## 📋 Descripción del Proyecto
 
-**Bookly** es una plataforma integral de gestión de reservas que combina la potencia de la arquitectura limpia con inteligencia artificial para revolucionar la experiencia de hoteles y restaurantes. El sistema utiliza equipos de agentes de IA basados en Python y LangChain para automatizar y optimizar múltiples aspectos de la operación.
+**Bookly** es un asistente inteligente de reservas multicanal que revoluciona la forma en que hoteles y restaurantes gestionan sus reservas. Con capacidades de IA conversacional, Bookly permite a los clientes hacer reservas de forma natural a través de múltiples canales, mientras que los negocios pueden automatizar su atención al cliente y aumentar sus ventas.
 
-## 🎯 Funcionalidades Principales
+### 🌟 **Diferenciadores Clave**
+- **Conversación Natural**: Los clientes hablan con Bookly como si fuera un humano
+- **Multicanal**: Web, WhatsApp, Instagram DM, y voz 24/7
+- **Multi-idioma**: Respuestas automáticas en el idioma del cliente
+- **Upselling Inteligente**: Sugerencias automáticas para aumentar ventas
+- **Sin Over-engineering**: Solución simple pero poderosa
+
+## 📲 Funcionalidades Core de Bookly (MVP)
+
+### 👉 **Comunes para Hoteles y Restaurantes (Core Compartido)**
+- **Reservas Conversacionales Multicanal**
+  - Web (chat widget o QR)
+  - WhatsApp / Instagram DM
+  - (Hoteles) también por voz 24/7
+- **Gestión de Disponibilidad**
+  - Restaurantes → mesas, turnos de 2h, máximo personas
+  - Hoteles → habitaciones, check-in/out, fechas de estancia
+- **Confirmación + Recordatorios Automáticos**
+  - Código de reserva único
+  - Mensaje de confirmación vía WhatsApp/email
+  - Recordatorio automático (24h antes)
+- **Calendario del Negocio**
+  - Panel simple para ver reservas del día/semana
+  - Bloquear fechas (festivos, eventos privados)
+
+## 🌟 Diferenciadores IA (Sin Complicarse)
+
+### 🔹 **Para Restaurantes**
+- **Conversación Natural**: Cliente dice "Mesa para 4 mañana a las 21h" → Bookly entiende y propone alternativas
+- **Menú IA (QR en mesa)**: Cliente escanea QR y pregunta "¿Qué hay sin gluten?", "Quiero algo bajo en calorías"
+- **Upselling Automático**: Agente sugiere menú degustación, maridajes o extras
+
+### 🔹 **Para Hoteles**
+- **Agente de Voz 24/7**: Cliente llama y el bot responde en varios idiomas
+- **Conserje Digital**: "¿A qué hora es el desayuno?", "¿Tienen parking?", "¿Hay tours cerca?"
+- **Multi-idioma Automático**: IA responde en el idioma del huésped
+- **Upselling Simple**: "¿Quieres añadir desayuno por 12€?" o "Habitación con vista al mar por +30€"
+
+## 🚀 Por qué Bookly es Diferencial
+
+### 🎯 **Problema Actual**
+- **Booking, TheFork, OpenTable**: Formularios planos y rígidos
+- **Atención al cliente**: Limitada a horarios de oficina
+- **Idiomas**: Requiere staff políglota
+- **Upselling**: Manual y dependiente del personal
+
+### ✅ **Solución Bookly**
+- **Conversación Natural**: Cliente habla como con un humano
+- **24/7**: Asistente que nunca duerme
+- **Multi-idioma**: IA responde automáticamente
+- **Upselling Automático**: Sugerencias inteligentes
+- **Sin Over-engineering**: Solución simple pero poderosa
+
+### 💡 **Valor para el Negocio**
+- **Más Reservas Directas**: Sin comisiones de terceros
+- **Atención 24/7**: Sin costos de personal adicional
+- **Multi-idioma**: Atrae clientes internacionales
+- **Upselling**: Aumenta el ticket promedio
+- **Eficiencia**: Libera tiempo del staff para tareas importantes
+
+## 🎯 Funcionalidades Técnicas Principales
 
 ### 🏨 **Gestión de Hoteles**
 - **Gestión de Habitaciones**: Creación, actualización y administración de habitaciones
@@ -146,38 +206,43 @@ npm run migration:run
 - [x] Configuración de base de datos
 - [x] Corrección completa de todos los tests
 
-### 🔄 **En Progreso (Fase 2)**
-- [ ] Implementación de controladores REST
-- [ ] Middleware de autenticación
-- [ ] Validaciones de entrada
-- [ ] Manejo de errores
-- [ ] Documentación de API
+### 🔄 **En Progreso (Fase 2 - MVP)**
+- [x] **HotelController** implementado con endpoints REST
+- [x] DTOs y validaciones básicas
+- [ ] Sistema de autenticación JWT
+- [ ] Panel básico de reservas
+- [ ] Chat widget web
+- [ ] Integración WhatsApp básica
+- [ ] Confirmaciones automáticas
 
 ### 📋 **Próximas Fases**
 
-#### **Fase 3: Integración con IA**
-- [ ] Implementación de agentes Python
+#### **Fase 3: Diferenciadores IA (1 mes)**
+- [ ] **Para Restaurantes**: Menú IA con QR
+- [ ] **Para Hoteles**: Agente de voz 24/7
+- [ ] Multi-idioma automático
+- [ ] Upselling inteligente
+- [ ] Conserje digital (FAQs)
 - [ ] Integración LangChain
-- [ ] APIs de comunicación Node.js ↔ Python
-- [ ] Agentes especializados por dominio
 
-#### **Fase 4: Frontend**
+#### **Fase 4: Frontend y UX**
 - [ ] Dashboard de administración
-- [ ] Interfaz de usuario para hoteles
-- [ ] Interfaz de usuario para restaurantes
-- [ ] Aplicación móvil (PWA)
+- [ ] Interfaz de usuario para clientes
+- [ ] Chat widget integrado
+- [ ] Diseño responsive y PWA
 
-#### **Fase 5: Funcionalidades Avanzadas**
-- [ ] Sistema de notificaciones
-- [ ] Integración con sistemas de pago
-- [ ] Analytics avanzados
-- [ ] Machine Learning para predicciones
+#### **Fase 5: Canales Avanzados**
+- [ ] Instagram DM bot
+- [ ] Sistema de notificaciones push
+- [ ] Email marketing automatizado
+- [ ] SMS y llamadas de voz
 
-#### **Fase 6: Producción**
-- [ ] Optimización de performance
+#### **Fase 6: Escalabilidad (A demanda)**
+- [ ] Integraciones PMS/POS
+- [ ] Caching con Redis
 - [ ] Monitoreo y logging
-- [ ] Backup y recuperación
-- [ ] Escalabilidad horizontal
+- [ ] CI/CD pipeline
+- [ ] Optimización de performance
 
 ## 🧪 Testing
 

@@ -1,3 +1,4 @@
+import { TableLocation } from '../../../../src/restaurant/domain/entities/table.entity';
 import { Table } from '../../../../src/restaurant/domain/entities/table.entity';
 
 describe('Table Entity', () => {
@@ -8,7 +9,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
         description: 'Table near the window',
       };
 
@@ -20,7 +21,7 @@ describe('Table Entity', () => {
       expect(table.businessId).toBe('restaurant-123');
       expect(table.number).toBe('T01');
       expect(table.capacity).toBe(4);
-      expect(table.location).toBe('INDOOR');
+      expect(table.location).toBe(TableLocation.INDOOR);
       expect(table.description).toBe('Table near the window');
       expect(table.isActive).toBe(true);
       expect(table.id).toBeDefined();
@@ -34,7 +35,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T02',
         capacity: 2,
-        location: 'OUTDOOR' as const,
+        location: TableLocation.OUTDOOR as const,
       };
 
       // Act
@@ -42,7 +43,7 @@ describe('Table Entity', () => {
 
       // Assert
       expect(table.description).toBeUndefined();
-      expect(table.location).toBe('OUTDOOR');
+      expect(table.location).toBe(TableLocation.OUTDOOR);
     });
 
     it('should create a VIP table', () => {
@@ -51,7 +52,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'VIP01',
         capacity: 6,
-        location: 'PATIO' as const,
+        location: TableLocation.PATIO as const,
         description: 'VIP table with exclusive service',
       };
 
@@ -59,7 +60,7 @@ describe('Table Entity', () => {
       const table = Table.create(tableData);
 
       // Assert
-      expect(table.location).toBe('PATIO');
+      expect(table.location).toBe(TableLocation.PATIO);
       expect(table.capacity).toBe(6);
     });
   });
@@ -71,7 +72,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: '',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       };
 
       // Act & Assert
@@ -84,7 +85,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 0,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       };
 
       // Act & Assert
@@ -110,7 +111,7 @@ describe('Table Entity', () => {
         businessId: '',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       };
 
       // Act & Assert
@@ -125,7 +126,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       // Act
@@ -142,7 +143,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
       table.deactivate();
 
@@ -160,20 +161,20 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
         description: 'Old description',
       });
 
       // Act
       table.updateInfo({
         capacity: 6,
-        location: 'OUTDOOR' as const,
+        location: TableLocation.OUTDOOR as const,
         description: 'New description',
       });
 
       // Assert
       expect(table.capacity).toBe(6);
-      expect(table.location).toBe('OUTDOOR');
+      expect(table.location).toBe(TableLocation.OUTDOOR);
       expect(table.description).toBe('New description');
       expect(table.updatedAt).toBeDefined();
     });
@@ -184,7 +185,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       // Act & Assert
@@ -197,7 +198,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       // Act & Assert
@@ -212,7 +213,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       // Act & Assert
@@ -227,7 +228,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
       table.deactivate();
 
@@ -241,21 +242,21 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       const terraceTable = Table.create({
         businessId: 'restaurant-123',
         number: 'T02',
         capacity: 2,
-        location: 'OUTDOOR' as const,
+        location: TableLocation.OUTDOOR as const,
       });
 
       const privateTable = Table.create({
         businessId: 'restaurant-123',
         number: 'T03',
         capacity: 6,
-        location: 'PATIO' as const,
+        location: TableLocation.PATIO as const,
       });
 
       // Act & Assert
@@ -270,14 +271,14 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 2,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       const largeTable = Table.create({
         businessId: 'restaurant-123',
         number: 'T02',
         capacity: 8,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       // Act & Assert
@@ -296,7 +297,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       // Act
@@ -313,7 +314,7 @@ describe('Table Entity', () => {
         businessId: 'restaurant-123',
         number: 'T01',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
       });
 
       // Act & Assert

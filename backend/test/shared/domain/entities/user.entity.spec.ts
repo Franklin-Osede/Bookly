@@ -1,3 +1,4 @@
+import { Email } from '../../../../src/shared/domain/value-objects/email';
 import { User } from '../../../../src/shared/domain/entities/user.entity';
 
 describe('User Entity', () => {
@@ -5,7 +6,7 @@ describe('User Entity', () => {
     it('should create a valid user with required fields', () => {
       // Arrange
       const userData = {
-        email: 'test@bookly.com',
+        email: new Email('test@bookly.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER' as const,
       };
@@ -25,7 +26,7 @@ describe('User Entity', () => {
     it('should create a business owner user', () => {
       // Arrange
       const userData = {
-        email: 'owner@hotel.com',
+        email: new Email('owner@hotel.com'), name: 'Test User',
         password: 'password123',
         role: 'BUSINESS_OWNER' as const,
       };
@@ -40,7 +41,7 @@ describe('User Entity', () => {
     it('should create an admin user', () => {
       // Arrange
       const userData = {
-        email: 'admin@bookly.com',
+        email: new Email('admin@bookly.com'), name: 'Test User',
         password: 'password123',
         role: 'ADMIN' as const,
       };
@@ -57,7 +58,7 @@ describe('User Entity', () => {
     it('should throw error for invalid email', () => {
       // Arrange
       const userData = {
-        email: 'invalid-email',
+        email: new Email('invalid-email'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER' as const,
       };
@@ -69,7 +70,7 @@ describe('User Entity', () => {
     it('should throw error for empty password', () => {
       // Arrange
       const userData = {
-        email: 'test@bookly.com',
+        email: new Email('test@bookly.com'), name: 'Test User',
         password: '',
         role: 'CUSTOMER' as const,
       };
@@ -81,7 +82,7 @@ describe('User Entity', () => {
     it('should throw error for invalid role', () => {
       // Arrange
       const userData = {
-        email: 'test@bookly.com',
+        email: new Email('test@bookly.com'), name: 'Test User',
         password: 'password123',
         role: 'INVALID_ROLE' as any,
       };
@@ -95,23 +96,23 @@ describe('User Entity', () => {
     it('should update user email', () => {
       // Arrange
       const user = User.create({
-        email: 'old@bookly.com',
+        email: new Email('old@bookly.com'), name: 'Test User',
         password: 'password123',
         role: 'CUSTOMER' as const,
       });
 
       // Act
-      user.updateEmail('new@bookly.com');
+      user.updateEmail(new Email('new@bookly.com'));
 
       // Assert
-      expect(user.email).toBe('new@bookly.com');
+      expect(user.email.value).toBe('new@bookly.com');
       expect(user.updatedAt).toBeDefined();
     });
 
     it('should update user password', () => {
       // Arrange
       const user = User.create({
-        email: 'test@bookly.com',
+        email: new Email('test@bookly.com'), name: 'Test User',
         password: 'oldpassword',
         role: 'CUSTOMER' as const,
       });

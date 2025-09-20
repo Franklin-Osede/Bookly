@@ -1,5 +1,5 @@
 import { RoomRepository } from '../../../../src/hotel/application/repositories/room.repository';
-import { Room } from '../../../../src/hotel/domain/entities/room.entity';
+import { Room, RoomType } from '../../../../src/hotel/domain/entities/room.entity';
 import { Money } from '../../../../src/shared/domain/value-objects/money';
 
 describe('RoomRepository', () => {
@@ -9,7 +9,7 @@ describe('RoomRepository', () => {
   const createTestRoom = (overrides: Partial<{
     businessId: string;
     number: string;
-    type: 'SINGLE' | 'DOUBLE' | 'SUITE' | 'DELUXE';
+    type: RoomType;
     capacity: number;
     price: number;
     currency: string;
@@ -18,7 +18,7 @@ describe('RoomRepository', () => {
     const defaults = {
       businessId: 'business-123',
       number: '101',
-      type: 'DOUBLE' as const,
+      type: RoomType.DOUBLE as const,
       capacity: 2,
       price: 150,
       currency: 'USD',
@@ -64,11 +64,11 @@ describe('RoomRepository', () => {
         }
         return null;
       },
-      async findByType(businessId: string, type: 'SINGLE' | 'DOUBLE' | 'SUITE' | 'DELUXE'): Promise<Room[]> {
+      async findByType(businessId: string, type: RoomType.SINGLE | RoomType.DOUBLE | RoomType.SUITE | RoomType.DELUXE): Promise<Room[]> {
         if (!businessId || businessId.trim() === '') {
           throw new Error('Business ID is required');
         }
-        if (!['SINGLE', 'DOUBLE', 'SUITE', 'DELUXE'].includes(type)) {
+        if (![RoomType.SINGLE, RoomType.DOUBLE, RoomType.SUITE, RoomType.DELUXE].includes(type)) {
           throw new Error('Invalid room type');
         }
         return [];
@@ -139,7 +139,7 @@ describe('RoomRepository', () => {
   describe('save', () => {
     it('should save a single room successfully', async () => {
       const room = createTestRoom({
-        type: 'SINGLE',
+        type: RoomType.SINGLE,
         number: '201',
         capacity: 1,
         price: 100
@@ -148,7 +148,7 @@ describe('RoomRepository', () => {
       const savedRoom = await roomRepository.save(room);
 
       expect(savedRoom).toBeInstanceOf(Room);
-      expect(savedRoom.type).toBe('SINGLE');
+      expect(savedRoom.type).toBe(RoomType.SINGLE);
       expect(savedRoom.number).toBe('201');
       expect(savedRoom.capacity).toBe(1);
       expect(savedRoom.price.amount).toBe(100);
@@ -156,7 +156,7 @@ describe('RoomRepository', () => {
 
     it('should save a suite room successfully', async () => {
       const room = createTestRoom({
-        type: 'SUITE',
+        type: RoomType.SUITE,
         number: '501',
         capacity: 4,
         price: 500
@@ -165,7 +165,7 @@ describe('RoomRepository', () => {
       const savedRoom = await roomRepository.save(room);
 
       expect(savedRoom).toBeInstanceOf(Room);
-      expect(savedRoom.type).toBe('SUITE');
+      expect(savedRoom.type).toBe(RoomType.SUITE);
       expect(savedRoom.number).toBe('501');
       expect(savedRoom.capacity).toBe(4);
       expect(savedRoom.price.amount).toBe(500);
@@ -175,7 +175,7 @@ describe('RoomRepository', () => {
       const room = createTestRoom({
         businessId: 'hotel-456',
         number: '301',
-        type: 'DELUXE',
+        type: RoomType.DELUXE,
         capacity: 3,
         price: 300,
         currency: 'EUR',
@@ -188,7 +188,7 @@ describe('RoomRepository', () => {
       expect(savedRoom.id).toBeDefined();
       expect(savedRoom.businessId).toBe('hotel-456');
       expect(savedRoom.number).toBe('301');
-      expect(savedRoom.type).toBe('DELUXE');
+      expect(savedRoom.type).toBe(RoomType.DELUXE);
       expect(savedRoom.capacity).toBe(3);
       expect(savedRoom.price.amount).toBe(300);
       expect(savedRoom.price.currency).toBe('EUR');
@@ -232,12 +232,12 @@ describe('RoomRepository', () => {
         createTestRoom({
           businessId: 'hotel-123',
           number: '101',
-          type: 'SINGLE'
+          type: RoomType.SINGLE
         }),
         createTestRoom({
           businessId: 'hotel-123',
           number: '102',
-          type: 'DOUBLE'
+          type: RoomType.DOUBLE
         })
       ];
 
@@ -298,12 +298,12 @@ describe('RoomRepository', () => {
       const rooms = [
         createTestRoom({
           businessId: 'hotel-123',
-          type: 'SUITE',
+          type: RoomType.SUITE,
           number: '501'
         }),
         createTestRoom({
           businessId: 'hotel-123',
-          type: 'SUITE',
+          type: RoomType.SUITE,
           number: '502'
         })
       ];
@@ -311,21 +311,21 @@ describe('RoomRepository', () => {
       // Mock the repository to return rooms
       roomRepository.findByType = jest.fn().mockResolvedValue(rooms);
 
-      const foundRooms = await roomRepository.findByType('hotel-123', 'SUITE');
+      const foundRooms = await roomRepository.findByType('hotel-123', RoomType.SUITE);
 
       expect(foundRooms).toHaveLength(2);
-      expect(foundRooms[0].type).toBe('SUITE');
-      expect(foundRooms[1].type).toBe('SUITE');
+      expect(foundRooms[0].type).toBe(RoomType.SUITE);
+      expect(foundRooms[1].type).toBe(RoomType.SUITE);
     });
 
     it('should return empty array when no rooms found with type', async () => {
-      const foundRooms = await roomRepository.findByType('hotel-123', 'DELUXE');
+      const foundRooms = await roomRepository.findByType('hotel-123', RoomType.DELUXE);
 
       expect(foundRooms).toEqual([]);
     });
 
     it('should throw error for invalid parameters', async () => {
-      await expect(roomRepository.findByType('', 'SUITE')).rejects.toThrow('Business ID is required');
+      await expect(roomRepository.findByType('', RoomType.SUITE)).rejects.toThrow('Business ID is required');
       await expect(roomRepository.findByType('hotel-123', 'INVALID_TYPE' as any)).rejects.toThrow('Invalid room type');
     });
   });
@@ -511,11 +511,11 @@ describe('RoomRepository', () => {
     it('should return all rooms', async () => {
       const rooms = [
         createTestRoom({
-          type: 'SINGLE',
+          type: RoomType.SINGLE,
           number: '101'
         }),
         createTestRoom({
-          type: 'DOUBLE',
+          type: RoomType.DOUBLE,
           number: '201'
         })
       ];

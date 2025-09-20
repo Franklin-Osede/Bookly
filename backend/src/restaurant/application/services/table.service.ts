@@ -2,28 +2,33 @@ import { BusinessRepository } from '../../../shared/application/repositories/bus
 import { TableRepository } from '../repositories/table.repository';
 import { ReservationRepository } from '../../../shared/application/repositories/reservation.repository';
 import { Business } from '../../../shared/domain/entities/business.entity';
-import { Table } from '../../domain/entities/table.entity';
+import { Table, TableLocation } from '../../domain/entities/table.entity';
 import { Reservation } from '../../../shared/domain/entities/reservation.entity';
+import { REPOSITORY_TOKENS } from '../../../shared/application/tokens/repository.tokens';
+import { Inject } from '@nestjs/common';
 
 export interface CreateTableData {
   businessId: string;
   number: string;
   capacity: number;
-  location: 'INDOOR' | 'OUTDOOR' | 'PATIO' | 'BAR';
+  location: TableLocation;
   description?: string;
 }
 
 export interface UpdateTableData {
   capacity?: number;
-  location?: 'INDOOR' | 'OUTDOOR' | 'PATIO' | 'BAR';
+  location?: TableLocation;
   description?: string;
   isActive?: boolean;
 }
 
 export class TableService {
   constructor(
+    @Inject(REPOSITORY_TOKENS.BUSINESS_REPOSITORY)
     private readonly businessRepository: BusinessRepository,
+    @Inject(REPOSITORY_TOKENS.TABLE_REPOSITORY)
     private readonly tableRepository: TableRepository,
+    @Inject(REPOSITORY_TOKENS.RESERVATION_REPOSITORY)
     private readonly reservationRepository: ReservationRepository
   ) {}
 

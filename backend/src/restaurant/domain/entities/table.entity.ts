@@ -1,4 +1,9 @@
-export type TableLocation = 'INDOOR' | 'OUTDOOR' | 'PATIO' | 'BAR';
+export enum TableLocation {
+  INDOOR = 'INDOOR',
+  OUTDOOR = 'OUTDOOR',
+  PATIO = 'PATIO',
+  BAR = 'BAR'
+}
 
 export interface CreateTableData {
   businessId: string;

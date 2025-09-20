@@ -1,4 +1,4 @@
-import { Room } from '../../../../src/hotel/domain/entities/room.entity';
+import { Room, RoomType } from '../../../../src/hotel/domain/entities/room.entity';
 import { Money } from '../../../../src/shared/domain/value-objects/money';
 
 describe('Room Entity', () => {
@@ -8,7 +8,7 @@ describe('Room Entity', () => {
       const roomData = {
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
         description: 'Standard room with city view',
@@ -21,7 +21,7 @@ describe('Room Entity', () => {
       expect(room).toBeDefined();
       expect(room.businessId).toBe('hotel-123');
       expect(room.number).toBe('101');
-      expect(room.type).toBe('SINGLE');
+      expect(room.type).toBe(RoomType.SINGLE);
       expect(room.capacity).toBe(2);
       expect(room.price.amount).toBe(150.00);
       expect(room.description).toBe('Standard room with city view');
@@ -36,7 +36,7 @@ describe('Room Entity', () => {
       const roomData = {
         businessId: 'hotel-123',
         number: '201',
-        type: 'SUITE' as const,
+        type: RoomType.SUITE as const,
         capacity: 4,
         price: new Money(300.00, 'USD'),
         description: 'Luxury suite with ocean view',
@@ -46,7 +46,7 @@ describe('Room Entity', () => {
       const room = Room.create(roomData);
 
       // Assert
-      expect(room.type).toBe('SUITE');
+      expect(room.type).toBe(RoomType.SUITE);
       expect(room.capacity).toBe(4);
       expect(room.price.amount).toBe(300.00);
     });
@@ -56,7 +56,7 @@ describe('Room Entity', () => {
       const roomData = {
         businessId: 'hotel-123',
         number: '301',
-        type: 'DELUXE' as const,
+        type: RoomType.DELUXE as const,
         capacity: 3,
         price: new Money(200.00, 'USD'),
       };
@@ -66,7 +66,7 @@ describe('Room Entity', () => {
 
       // Assert
       expect(room.description).toBeUndefined();
-      expect(room.type).toBe('DELUXE');
+      expect(room.type).toBe(RoomType.DELUXE);
     });
   });
 
@@ -76,7 +76,7 @@ describe('Room Entity', () => {
       const roomData = {
         businessId: 'hotel-123',
         number: '',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       };
@@ -90,7 +90,7 @@ describe('Room Entity', () => {
       const roomData = {
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 0,
         price: new Money(150.00, 'USD'),
       };
@@ -126,7 +126,7 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       });
@@ -144,7 +144,7 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       });
@@ -163,7 +163,7 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
         description: 'Old description',
@@ -171,14 +171,14 @@ describe('Room Entity', () => {
 
       // Act
       room.updateInfo({
-        type: 'DELUXE' as const,
+        type: RoomType.DELUXE as const,
         capacity: 3,
         price: new Money(200.00, 'USD'),
         description: 'New description',
       });
 
       // Assert
-      expect(room.type).toBe('DELUXE');
+      expect(room.type).toBe(RoomType.DELUXE);
       expect(room.capacity).toBe(3);
       expect(room.price.amount).toBe(200.00);
       expect(room.description).toBe('New description');
@@ -190,7 +190,7 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       });
@@ -204,7 +204,7 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       });
@@ -220,7 +220,7 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       });
@@ -236,7 +236,7 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       });
@@ -251,7 +251,7 @@ describe('Room Entity', () => {
       const room = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       });
@@ -268,7 +268,7 @@ describe('Room Entity', () => {
       const standardRoom = Room.create({
         businessId: 'hotel-123',
         number: '101',
-        type: 'SINGLE' as const,
+        type: RoomType.SINGLE as const,
         capacity: 2,
         price: new Money(150.00, 'USD'),
       });
@@ -276,7 +276,7 @@ describe('Room Entity', () => {
       const suiteRoom = Room.create({
         businessId: 'hotel-123',
         number: '201',
-        type: 'SUITE' as const,
+        type: RoomType.SUITE as const,
         capacity: 4,
         price: new Money(300.00, 'USD'),
       });

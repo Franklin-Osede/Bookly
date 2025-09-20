@@ -1,6 +1,11 @@
 import { Money } from '../../../shared/domain/value-objects/money';
 
-export type RoomType = 'SINGLE' | 'DOUBLE' | 'SUITE' | 'DELUXE';
+ export enum RoomType {
+  SINGLE = 'SINGLE',
+  DOUBLE = 'DOUBLE',
+  SUITE = 'SUITE',
+  DELUXE = 'DELUXE'
+}
 
 export interface CreateRoomData {
   businessId: string;

@@ -1,3 +1,4 @@
+import { TableLocation } from '../../../../src/restaurant/domain/entities/table.entity';
 import { TableService } from '../../../../src/restaurant/application/services/table.service';
 import { BusinessRepository } from '../../../../src/shared/application/repositories/business.repository';
 import { TableRepository } from '../../../../src/restaurant/application/repositories/table.repository';
@@ -53,14 +54,14 @@ describe('TableService', () => {
     businessId: string;
     number: string;
     capacity: number;
-    location: 'INDOOR' | 'OUTDOOR' | 'PATIO' | 'BAR';
+    location: TableLocation.INDOOR | TableLocation.OUTDOOR | TableLocation.PATIO | TableLocation.BAR;
     isActive: boolean;
   }> = {}) => {
     const defaults = {
       businessId: 'business-123',
       number: 'T1',
       capacity: 4,
-      location: 'INDOOR' as const,
+      location: TableLocation.INDOOR as const,
       isActive: true
     };
     const data = { ...defaults, ...overrides };
@@ -135,7 +136,7 @@ describe('TableService', () => {
         businessId: business.id,
         number: 'T1',
         capacity: 4,
-        location: 'INDOOR' as const,
+        location: TableLocation.INDOOR as const,
         description: 'Comfortable indoor table'
       };
 
@@ -151,7 +152,7 @@ describe('TableService', () => {
       expect(result.businessId).toBe(business.id);
       expect(result.number).toBe('T1');
       expect(result.capacity).toBe(4);
-      expect(result.location).toBe('INDOOR');
+      expect(result.location).toBe(TableLocation.INDOOR);
       expect(result.isActive).toBe(true);
       expect(tableRepository.save).toHaveBeenCalledWith(expect.any(Table));
     });
@@ -162,7 +163,7 @@ describe('TableService', () => {
         businessId: 'non-existent-business',
         number: 'T1',
         capacity: 4,
-        location: 'INDOOR' as const
+        location: TableLocation.INDOOR as const
       };
 
       businessRepository.findById.mockResolvedValue(null);
@@ -179,7 +180,7 @@ describe('TableService', () => {
         businessId: business.id,
         number: 'T1',
         capacity: 4,
-        location: 'INDOOR' as const
+        location: TableLocation.INDOOR as const
       };
 
       businessRepository.findById.mockResolvedValue(business);
@@ -197,7 +198,7 @@ describe('TableService', () => {
         businessId: business.id,
         number: 'T1',
         capacity: 2,
-        location: 'OUTDOOR' as const
+        location: TableLocation.OUTDOOR as const
       };
 
       businessRepository.findById.mockResolvedValue(business);
@@ -220,7 +221,7 @@ describe('TableService', () => {
 
       const updateData = {
         capacity: 6,
-        location: 'OUTDOOR' as const,
+        location: TableLocation.OUTDOOR as const,
         description: 'Updated table description'
       };
 
@@ -423,20 +424,20 @@ describe('TableService', () => {
       // Arrange
       const business = createTestBusiness({ type: 'RESTAURANT' });
       const tables = [
-        createTestTable({ businessId: business.id, location: 'OUTDOOR', number: 'T10' }),
-        createTestTable({ businessId: business.id, location: 'OUTDOOR', number: 'T11' })
+        createTestTable({ businessId: business.id, location: TableLocation.OUTDOOR, number: 'T10' }),
+        createTestTable({ businessId: business.id, location: TableLocation.OUTDOOR, number: 'T11' })
       ];
 
       businessRepository.findById.mockResolvedValue(business);
       tableRepository.findByLocation.mockResolvedValue(tables);
 
       // Act
-      const result = await tableService.getTablesByLocation(business.id, 'OUTDOOR');
+      const result = await tableService.getTablesByLocation(business.id, TableLocation.OUTDOOR);
 
       // Assert
       expect(result).toHaveLength(2);
-      expect(result[0].location).toBe('OUTDOOR');
-      expect(result[1].location).toBe('OUTDOOR');
+      expect(result[0].location).toBe(TableLocation.OUTDOOR);
+      expect(result[1].location).toBe(TableLocation.OUTDOOR);
     });
 
     it('should throw error when business not found', async () => {
@@ -444,7 +445,7 @@ describe('TableService', () => {
       businessRepository.findById.mockResolvedValue(null);
 
       // Act & Assert
-      await expect(tableService.getTablesByLocation('non-existent-business', 'OUTDOOR'))
+      await expect(tableService.getTablesByLocation('non-existent-business', TableLocation.OUTDOOR))
         .rejects.toThrow('Business not found');
     });
   });
@@ -708,7 +709,7 @@ describe('TableService', () => {
       // Arrange
       const table = createTestTable({
         businessId: 'business-123',
-        location: 'OUTDOOR',
+        location: TableLocation.OUTDOOR,
         number: 'T10'
       });
 
@@ -744,7 +745,7 @@ describe('TableService', () => {
       // Arrange
       const table = createTestTable({
         businessId: 'business-123',
-        location: 'PATIO',
+        location: TableLocation.PATIO,
         number: 'T10'
       });
 
