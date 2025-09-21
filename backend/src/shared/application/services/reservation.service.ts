@@ -284,4 +284,69 @@ export class ReservationService {
   async getReservationsByType(type: 'HOTEL' | 'RESTAURANT'): Promise<Reservation[]> {
     return await this.reservationRepository.findByType(type);
   }
+
+  async findById(id: string): Promise<Reservation | null> {
+    return await this.reservationRepository.findById(id);
+  }
+
+  async findByUserId(userId: string): Promise<Reservation[]> {
+    return await this.reservationRepository.findByUserId(userId);
+  }
+
+  async findByBusinessId(businessId: string): Promise<Reservation[]> {
+    return await this.reservationRepository.findByBusinessId(businessId);
+  }
+
+  async findByDateRange(startDate: Date, endDate: Date): Promise<Reservation[]> {
+    return await this.reservationRepository.findByDateRange(startDate, endDate);
+  }
+
+  async findByStatus(status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED'): Promise<Reservation[]> {
+    return await this.reservationRepository.findByStatus(status);
+  }
+
+  async findByType(type: 'HOTEL' | 'RESTAURANT'): Promise<Reservation[]> {
+    return await this.reservationRepository.findByType(type);
+  }
+
+  async findOverlappingReservations(businessId: string, startDate: Date, endDate: Date): Promise<Reservation[]> {
+    return await this.reservationRepository.findOverlappingReservations(businessId, startDate, endDate);
+  }
+
+  async findActiveReservations(businessId: string): Promise<Reservation[]> {
+    return await this.reservationRepository.findActiveReservations(businessId);
+  }
+
+  async findUpcomingReservations(businessId: string, days: number = 7): Promise<Reservation[]> {
+    return await this.reservationRepository.findUpcomingReservations(businessId, days);
+  }
+
+  async update(id: string, data: any): Promise<Reservation> {
+    return await this.reservationRepository.update(id, data);
+  }
+
+  async delete(id: string): Promise<boolean> {
+    return await this.reservationRepository.delete(id);
+  }
+
+  async exists(id: string): Promise<boolean> {
+    return await this.reservationRepository.exists(id);
+  }
+
+  async findAll(): Promise<Reservation[]> {
+    return await this.reservationRepository.findAll();
+  }
+
+  async countByStatus(status: string): Promise<number> {
+    return await this.reservationRepository.countByStatus(status);
+  }
+
+  async countByBusinessId(businessId: string): Promise<number> {
+    return await this.reservationRepository.countByBusinessId(businessId);
+  }
+
+  async getRevenueByBusinessId(businessId: string, startDate?: Date, endDate?: Date): Promise<number> {
+    return await this.reservationRepository.getRevenueByBusinessId(businessId, startDate, endDate);
+  }
+
 }

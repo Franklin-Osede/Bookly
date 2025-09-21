@@ -6,6 +6,8 @@ export type ReservationStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLET
 export interface CreateReservationData {
   userId: string;
   businessId: string;
+  roomId?: string;
+  tableId?: string;
   type: ReservationType;
   startDate: Date;
   endDate: Date;
@@ -19,6 +21,8 @@ export class Reservation {
   public readonly id: string;
   public userId: string;
   public businessId: string;
+  public roomId?: string;
+  public tableId?: string;
   public type: ReservationType;
   public status: ReservationStatus;
   public startDate: Date;
@@ -33,11 +37,15 @@ export class Reservation {
     id: string; 
     status: ReservationStatus; 
     createdAt: Date; 
-    updatedAt: Date 
+    updatedAt: Date;
+    roomId?: string;
+    tableId?: string;
   }) {
     this.id = data.id;
     this.userId = data.userId;
     this.businessId = data.businessId;
+    this.roomId = data.roomId;
+    this.tableId = data.tableId;
     this.type = data.type;
     this.status = data.status;
     this.startDate = data.startDate;
@@ -68,6 +76,8 @@ export class Reservation {
       id: Reservation.generateId(),
       userId: data.userId,
       businessId: data.businessId,
+      roomId: data.roomId,
+      tableId: data.tableId,
       type: data.type,
       status: data.status || 'PENDING',
       startDate: data.startDate,

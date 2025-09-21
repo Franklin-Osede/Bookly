@@ -93,4 +93,47 @@ export class ReservationRepositoryImpl implements ReservationRepository {
   async exists(id: string): Promise<boolean> {
     return this.reservations.some(reservation => reservation.id === id);
   }
+
+  async findActiveReservations(businessId: string): Promise<Reservation[]> {
+    return this.reservations.filter(r => 
+      r.businessId === businessId && r.status === 'CONFIRMED'
+    );
+  }
+
+  async findUpcomingReservations(businessId: string, days: number = 7): Promise<Reservation[]> {
+    const startDate = new Date();
+    const endDate = new Date();
+    endDate.setDate(startDate.getDate() + days);
+
+    return this.reservations.filter(r => 
+      r.businessId === businessId && 
+      r.status === 'CONFIRMED' &&
+      r.startDate >= startDate &&
+      r.startDate <= endDate
+    );
+  }
+
+  async countByStatus(status: string): Promise<number> {
+    return this.reservations.filter(r => r.status === status).length;
+  }
+
+  async countByBusinessId(businessId: string): Promise<number> {
+    return this.reservations.filter(r => r.businessId === businessId).length;
+  }
+
+  async getRevenueByBusinessId(businessId: string, startDate?: Date, endDate?: Date): Promise<number> {
+    let filteredReservations = this.reservations.filter(r => 
+      r.businessId === businessId && r.status === 'CONFIRMED'
+    );
+
+    if (startDate) {
+      filteredReservations = filteredReservations.filter(r => r.startDate >= startDate);
+    }
+
+    if (endDate) {
+      filteredReservations = filteredReservations.filter(r => r.endDate <= endDate);
+    }
+
+    return filteredReservations.reduce((total, r) => total + r.totalAmount.amount, 0);
+  }
 }

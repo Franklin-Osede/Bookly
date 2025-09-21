@@ -87,6 +87,44 @@ export interface ReservationRepository {
    * @returns Promise<boolean> - True if exists, false otherwise
    */
   exists(id: string): Promise<boolean>;
+
+  /**
+   * Find active reservations for a business
+   * @param businessId - The business ID
+   * @returns Promise<Reservation[]> - Array of active reservations
+   */
+  findActiveReservations(businessId: string): Promise<Reservation[]>;
+
+  /**
+   * Find upcoming reservations for a business
+   * @param businessId - The business ID
+   * @param days - Number of days to look ahead (default 7)
+   * @returns Promise<Reservation[]> - Array of upcoming reservations
+   */
+  findUpcomingReservations(businessId: string, days?: number): Promise<Reservation[]>;
+
+  /**
+   * Count reservations by status
+   * @param status - The reservation status
+   * @returns Promise<number> - Number of reservations with the status
+   */
+  countByStatus(status: string): Promise<number>;
+
+  /**
+   * Count reservations by business ID
+   * @param businessId - The business ID
+   * @returns Promise<number> - Number of reservations for the business
+   */
+  countByBusinessId(businessId: string): Promise<number>;
+
+  /**
+   * Get revenue by business ID
+   * @param businessId - The business ID
+   * @param startDate - Optional start date filter
+   * @param endDate - Optional end date filter
+   * @returns Promise<number> - Total revenue
+   */
+  getRevenueByBusinessId(businessId: string, startDate?: Date, endDate?: Date): Promise<number>;
 }
 
 
