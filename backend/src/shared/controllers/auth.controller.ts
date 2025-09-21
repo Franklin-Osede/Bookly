@@ -97,8 +97,16 @@ export class AuthController {
     status: 401,
     description: 'Token inválido o expirado'
   })
-  async getProfile(@CurrentUser() user: User): Promise<User> {
-    return this.authService.getProfile(user.id);
+  async getProfile(@CurrentUser() user: User): Promise<any> {
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email.value,
+      role: user.role,
+      phone: user.phone?.value,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt
+    };
   }
 
   @Post('refresh')

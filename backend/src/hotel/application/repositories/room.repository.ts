@@ -100,3 +100,4 @@ export interface RoomRepository {
    */
   exists(id: string): Promise<boolean>;
 }
+

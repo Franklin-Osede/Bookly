@@ -16,7 +16,7 @@ describe('User Entity', () => {
 
       // Assert
       expect(user).toBeDefined();
-      expect(user.email).toBe('test@bookly.com');
+      expect(user.email.value).toBe('test@bookly.com');
       expect(user.role).toBe('CUSTOMER');
       expect(user.id).toBeDefined();
       expect(user.createdAt).toBeDefined();
@@ -56,15 +56,8 @@ describe('User Entity', () => {
 
   describe('validation', () => {
     it('should throw error for invalid email', () => {
-      // Arrange
-      const userData = {
-        email: new Email('invalid-email'), name: 'Test User',
-        password: 'password123',
-        role: 'CUSTOMER' as const,
-      };
-
       // Act & Assert
-      expect(() => User.create(userData)).toThrow('Invalid email format');
+      expect(() => new Email('invalid-email')).toThrow('Invalid email format');
     });
 
     it('should throw error for empty password', () => {

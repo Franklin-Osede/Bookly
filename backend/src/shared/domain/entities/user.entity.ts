@@ -1,5 +1,6 @@
 import { Email } from '../value-objects/email';
 import { PhoneNumber } from '../value-objects/phone-number';
+import { randomUUID } from 'crypto';
 
 export type UserRole = 'ADMIN' | 'BUSINESS_OWNER' | 'CUSTOMER';
 
@@ -100,7 +101,7 @@ export class User {
   }
 
   private static generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+    return randomUUID();
   }
 }
 

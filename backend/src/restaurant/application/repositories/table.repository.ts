@@ -90,3 +90,4 @@ export interface TableRepository {
    */
   exists(id: string): Promise<boolean>;
 }
+

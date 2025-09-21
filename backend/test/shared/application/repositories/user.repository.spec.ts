@@ -59,7 +59,7 @@ describe('UserRepository', () => {
       const savedUser = await userRepository.save(user);
 
       expect(savedUser).toBeInstanceOf(User);
-      expect(savedUser.email).toBe('test@example.com');
+      expect(savedUser.email.value).toBe('test@example.com');
       expect(savedUser.role).toBe('CUSTOMER');
     });
 
@@ -74,7 +74,7 @@ describe('UserRepository', () => {
 
       expect(savedUser).toBeDefined();
       expect(savedUser.id).toBeDefined();
-      expect(savedUser.email).toBe('admin@example.com');
+      expect(savedUser.email.value).toBe('admin@example.com');
       expect(savedUser.role).toBe('ADMIN');
       expect(savedUser.createdAt).toBeDefined();
       expect(savedUser.updatedAt).toBeDefined();
@@ -95,7 +95,7 @@ describe('UserRepository', () => {
       const foundUser = await userRepository.findById('user-id');
 
       expect(foundUser).toBeInstanceOf(User);
-      expect(foundUser?.email).toBe('test@example.com');
+      expect(foundUser?.email.value).toBe('test@example.com');
     });
 
     it('should return null when user not found by id', async () => {
@@ -124,7 +124,7 @@ describe('UserRepository', () => {
       const foundUser = await userRepository.findByEmail(email);
 
       expect(foundUser).toBeInstanceOf(User);
-      expect(foundUser?.email).toBe('test@example.com');
+      expect(foundUser?.email.value).toBe('test@example.com');
     });
 
     it('should return null when user not found by email', async () => {
@@ -148,7 +148,7 @@ describe('UserRepository', () => {
       const foundUser = await userRepository.findByEmail(email);
 
       expect(foundUser).toBeInstanceOf(User);
-      expect(foundUser?.email).toBe('test@example.com');
+      expect(foundUser?.email.value).toBe('test@example.com');
     });
   });
 
@@ -309,7 +309,7 @@ describe('UserRepository', () => {
       const existingUser = await userRepository.findByEmail(email);
 
       expect(existingUser).toBeInstanceOf(User);
-      expect(existingUser?.email).toBe('duplicate@example.com');
+      expect(existingUser?.email.value).toBe('duplicate@example.com');
     });
   });
 });
