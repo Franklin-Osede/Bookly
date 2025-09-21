@@ -42,6 +42,9 @@ export class BusinessEntity {
   @Column({ type: 'boolean', default: true })
   isActive: boolean;
 
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  ownerId: string;
+
   @CreateDateColumn()
   createdAt: Date;
 

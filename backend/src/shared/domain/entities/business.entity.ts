@@ -12,6 +12,7 @@ export interface CreateBusinessData {
   phone: PhoneNumber;
   email: Email;
   ownerId: string;
+  isActive?: boolean;
 }
 
 export interface UpdateBusinessData {
@@ -20,6 +21,7 @@ export interface UpdateBusinessData {
   address?: Address;
   phone?: PhoneNumber;
   email?: Email;
+  isActive?: boolean;
 }
 
 export class Business {
@@ -31,6 +33,7 @@ export class Business {
   public phone: PhoneNumber;
   public email: Email;
   public ownerId: string;
+  public isActive: boolean;
   public readonly createdAt: Date;
   public updatedAt: Date;
 
@@ -43,6 +46,7 @@ export class Business {
     this.phone = data.phone;
     this.email = data.email;
     this.ownerId = data.ownerId;
+    this.isActive = data.isActive ?? true;
     this.createdAt = data.createdAt;
     this.updatedAt = data.updatedAt;
   }
@@ -67,6 +71,7 @@ export class Business {
       phone: data.phone,
       email: data.email,
       ownerId: data.ownerId,
+      isActive: data.isActive ?? true,
       createdAt: now,
       updatedAt: now,
     });
@@ -96,6 +101,10 @@ export class Business {
       this.email = data.email;
     }
 
+    if (data.isActive !== undefined) {
+      this.isActive = data.isActive;
+    }
+
     this.updatedAt = new Date();
   }
 
@@ -104,7 +113,7 @@ export class Business {
   }
 
   private static generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+    return crypto.randomUUID();
   }
 }
 
