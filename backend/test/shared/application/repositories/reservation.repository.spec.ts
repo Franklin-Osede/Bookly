@@ -62,6 +62,21 @@ describe('ReservationRepository', () => {
         }
         return [];
       },
+      async findActiveReservations(businessId: string): Promise<Reservation[]> {
+        return [];
+      },
+      async findUpcomingReservations(businessId: string, days: number = 7): Promise<Reservation[]> {
+        return [];
+      },
+      async countByStatus(status: string): Promise<number> {
+        return 0;
+      },
+      async countByBusinessId(businessId: string): Promise<number> {
+        return 0;
+      },
+      async getRevenueByBusinessId(businessId: string, startDate?: Date, endDate?: Date): Promise<number> {
+        return 0;
+      },
       async findByBusinessId(businessId: string): Promise<Reservation[]> {
         if (!businessId || businessId.trim() === '') {
           throw new Error('Invalid business ID format');
