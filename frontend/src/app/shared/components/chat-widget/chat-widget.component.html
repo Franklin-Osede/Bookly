@@ -1,0 +1,75 @@
+<div class="chat-widget">
+  <!-- Chat Toggle Button -->
+  <button 
+    mat-fab 
+    color="primary" 
+    class="chat-toggle"
+    (click)="toggleChat()"
+    [class.open]="isOpen">
+    <mat-icon>{{ isOpen ? 'close' : 'chat' }}</mat-icon>
+  </button>
+
+  <!-- Chat Panel -->
+  <div class="chat-panel" [class.open]="isOpen">
+    <div class="chat-header">
+      <h3>Bookly Assistant</h3>
+      <p>¿En qué puedo ayudarte?</p>
+    </div>
+
+    <div class="chat-messages">
+      <div 
+        *ngFor="let message of messages" 
+        class="message"
+        [class.user]="message.isUser"
+        [class.ai]="!message.isUser">
+        
+        <div class="message-content">
+          {{ message.content }}
+        </div>
+        
+        <div *ngIf="message.suggestions && message.suggestions.length > 0" class="suggestions">
+          <button 
+            *ngFor="let suggestion of message.suggestions"
+            mat-stroked-button 
+            size="small"
+            (click)="onSuggestionClick(suggestion)"
+            class="suggestion-button">
+            {{ suggestion }}
+          </button>
+        </div>
+        
+        <div class="message-time">
+          {{ message.timestamp | date:'short' }}
+        </div>
+      </div>
+      
+      <div *ngIf="isLoading" class="message ai">
+        <div class="message-content">
+          <mat-icon class="loading-icon">refresh</mat-icon>
+          Escribiendo...
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input">
+      <form [formGroup]="messageForm" (ngSubmit)="sendMessage()">
+        <mat-form-field appearance="outline" class="message-field">
+          <mat-label>Escribe tu mensaje...</mat-label>
+          <input 
+            matInput 
+            formControlName="message"
+            (keydown)="onKeyDown($event)"
+            placeholder="Ej: Quiero una mesa para 4 personas">
+        </mat-form-field>
+        
+        <button 
+          mat-icon-button 
+          type="submit"
+          [disabled]="messageForm.invalid || isLoading"
+          class="send-button">
+          <mat-icon>send</mat-icon>
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
