@@ -1,0 +1,84 @@
+<div class="reservation-form-container">
+  <div class="form-header">
+    <h1>{{ isEdit ? 'Editar Reserva' : 'Nueva Reserva' }}</h1>
+    <button mat-button (click)="cancel()">
+      <mat-icon>arrow_back</mat-icon>
+      Volver
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="reservationForm" (ngSubmit)="onSubmit()" class="reservation-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Negocio</mat-label>
+            <mat-select formControlName="businessId">
+              <mat-option value="1">Hotel Plaza</mat-option>
+              <mat-option value="2">Restaurante El Buen Sabor</mat-option>
+            </mat-select>
+            <mat-error *ngIf="reservationForm.get('businessId')?.hasError('required')">
+              Selecciona un negocio
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error *ngIf="reservationForm.get('date')?.hasError('required')">
+              La fecha es requerida
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Hora</mat-label>
+            <input matInput type="time" formControlName="time">
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Número de Personas</mat-label>
+            <input matInput type="number" formControlName="guests" min="1">
+            <mat-error *ngIf="reservationForm.get('guests')?.hasError('required')">
+              El número de personas es requerido
+            </mat-error>
+            <mat-error *ngIf="reservationForm.get('guests')?.hasError('min')">
+              Mínimo 1 persona
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Solicitudes Especiales</mat-label>
+            <textarea matInput formControlName="specialRequests" rows="3"></textarea>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="cancel()">
+            Cancelar
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit" 
+            [disabled]="reservationForm.invalid || isLoading">
+            <span *ngIf="isLoading">Guardando...</span>
+            <span *ngIf="!isLoading">{{ isEdit ? 'Actualizar' : 'Crear' }} Reserva</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

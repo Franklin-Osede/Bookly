@@ -1,0 +1,91 @@
+<div class="business-form-container">
+  <div class="form-header">
+    <h1>{{ isEdit ? 'Editar Negocio' : 'Nuevo Negocio' }}</h1>
+    <button mat-button (click)="cancel()">
+      <mat-icon>arrow_back</mat-icon>
+      Volver
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="businessForm" (ngSubmit)="onSubmit()" class="business-form">
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Nombre del Negocio</mat-label>
+            <input matInput formControlName="name" placeholder="Ej: Hotel Plaza">
+            <mat-error *ngIf="businessForm.get('name')?.hasError('required')">
+              El nombre es requerido
+            </mat-error>
+            <mat-error *ngIf="businessForm.get('name')?.hasError('minlength')">
+              Mínimo 2 caracteres
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Tipo de Negocio</mat-label>
+            <mat-select formControlName="type">
+              <mat-option *ngFor="let type of businessTypes" [value]="type.value">
+                {{ type.label }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="businessForm.get('type')?.hasError('required')">
+              Selecciona un tipo
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="address" placeholder="Ej: Calle Principal 123, Madrid">
+            <mat-error *ngIf="businessForm.get('address')?.hasError('required')">
+              La dirección es requerida
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Teléfono</mat-label>
+            <input matInput formControlName="phone" placeholder="+34 123 456 789">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="half-width">
+            <mat-label>Email</mat-label>
+            <input matInput type="email" formControlName="email" placeholder="contacto@negocio.com">
+            <mat-error *ngIf="businessForm.get('email')?.hasError('email')">
+              Email inválido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Descripción</mat-label>
+            <textarea matInput formControlName="description" rows="3" placeholder="Describe tu negocio..."></textarea>
+          </mat-form-field>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <div class="form-actions">
+          <button mat-button type="button" (click)="cancel()">
+            Cancelar
+          </button>
+          <button 
+            mat-raised-button 
+            color="primary" 
+            type="submit" 
+            [disabled]="businessForm.invalid || isLoading">
+            <span *ngIf="isLoading">Guardando...</span>
+            <span *ngIf="!isLoading">{{ isEdit ? 'Actualizar' : 'Crear' }} Negocio</span>
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+

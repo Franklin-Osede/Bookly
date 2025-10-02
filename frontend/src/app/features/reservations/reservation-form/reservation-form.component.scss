@@ -1,0 +1,71 @@
+.reservation-form-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  
+  h1 {
+    margin: 0;
+    color: #1976d2;
+  }
+}
+
+.reservation-form {
+  .form-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+    
+    .full-width {
+      flex: 1;
+    }
+    
+    .half-width {
+      flex: 0.5;
+    }
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+  }
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 12px;
+  border-radius: 4px;
+  margin: 16px 0;
+}
+
+// Responsive
+@media (max-width: 768px) {
+  .reservation-form-container {
+    padding: 16px;
+  }
+  
+  .form-header {
+    flex-direction: column;
+    gap: 16px;
+    text-align: center;
+  }
+  
+  .reservation-form .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+}
+

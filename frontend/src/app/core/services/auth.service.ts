@@ -47,12 +47,12 @@ export class AuthService {
     this.currentUserSubject.next(null);
   }
 
-  getCurrentUser(): User | null {
-    return this.currentUserSubject.value;
+  getCurrentUser(): Observable<User | null> {
+    return this.currentUser$;
   }
 
   isAuthenticated(): boolean {
-    return this.getCurrentUser() !== null;
+    return this.currentUserSubject.value !== null;
   }
 
   getToken(): string | null {

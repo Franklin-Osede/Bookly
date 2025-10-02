@@ -1,18 +1,17 @@
 export interface Reservation {
   id: string;
-  userId: string;
   businessId: string;
+  userId: string;
   roomId?: string;
   tableId?: string;
   startDate: Date;
   endDate: Date;
   numberOfGuests: number;
   status: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
-  totalAmount: {
-    amount: number;
-    currency: string;
-  };
+  totalAmountAmount: number;
+  totalAmountCurrency: string;
   specialRequests?: string;
+  customerName?: string;
   createdAt: Date;
   updatedAt: Date;
 }

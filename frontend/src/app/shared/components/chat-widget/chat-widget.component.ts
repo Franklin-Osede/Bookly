@@ -1,12 +1,27 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule, DatePipe } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 import { AiService } from '../../../core/services/ai.service';
 import { ConversationRequest, ConversationResponse, ChatMessage } from '../../../core/models/ai.model';
 
 @Component({
   selector: 'app-chat-widget',
   templateUrl: './chat-widget.component.html',
-  styleUrls: ['./chat-widget.component.scss']
+  styleUrls: ['./chat-widget.component.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    DatePipe,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ]
 })
 export class ChatWidgetComponent {
   isOpen = false;

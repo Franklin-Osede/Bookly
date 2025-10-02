@@ -227,4 +227,27 @@ describe('ReservationService', () => {
       req.flush(mockResponse);
     });
   });
+
+  describe('Dashboard methods', () => {
+    it('should get reservations for dashboard', (done) => {
+      service.getReservations().subscribe(reservations => {
+        expect(reservations).toBeDefined();
+        expect(reservations.length).toBeGreaterThan(0);
+        expect(reservations[0].customerName).toBeDefined();
+        done();
+      });
+    });
+
+    it('should get reservation stats for dashboard', (done) => {
+      service.getReservationsStats().subscribe(stats => {
+        expect(stats).toBeDefined();
+        expect(stats.totalReservations).toBeDefined();
+        expect(stats.confirmedReservations).toBeDefined();
+        expect(stats.pendingReservations).toBeDefined();
+        expect(stats.totalRevenue).toBeDefined();
+        expect(stats.occupancyRate).toBeDefined();
+        done();
+      });
+    });
+  });
 });
